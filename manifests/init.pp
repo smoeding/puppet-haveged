@@ -55,7 +55,7 @@ class haveged (
   $package_ensure         = installed,
 ) inherits ::haveged::params {
 
-  # Validate numeric values
+  # Validate numeric parameters
   if ($buffer_size != undef) {
     validate_re($buffer_size, '^[0-9]+$')
   }
