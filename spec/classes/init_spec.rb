@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe 'haveged' do
 
-  context 'On Debian with all default parameters' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with all default parameters' do
     it {
       should contain_class('haveged')
 
@@ -23,11 +19,7 @@ describe 'haveged' do
     }
   end
 
-  context 'On Debian with service_ensure => stopped' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with service_ensure => stopped' do
     let :params do
       { :service_ensure => 'stopped' }
     end
@@ -44,11 +36,7 @@ describe 'haveged' do
     }
   end
 
-  context 'On Debian with package parameters defined' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with package parameters defined' do
     let :params do
       { :package_name => 'foobar', :package_ensure => 'foo' }
     end
@@ -61,11 +49,7 @@ describe 'haveged' do
     }
   end
 
-  context 'On Debian with service parameters defined' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with service parameters defined' do
     let :params do
       {
         :service_name   => 'foobar',
@@ -83,11 +67,7 @@ describe 'haveged' do
     }
   end
 
-  context 'On Debian with config parameters defined' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with config parameters defined' do
     let :params do
       {
         :buffer_size            => '2',
@@ -114,7 +94,7 @@ describe 'haveged' do
     end
 
     it {
-      expect { should compile }.to raise_error(/Unsupported operatingsystem/)
+      expect { subject.call }.to raise_error(/Unsupported operatingsystem/)
     }
   end
 end

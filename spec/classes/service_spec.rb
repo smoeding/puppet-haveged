@@ -1,13 +1,8 @@
-# coding: utf-8
 require 'spec_helper'
 
 describe 'haveged::service' do
 
-  context 'On Debian with default parameters' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with default parameters' do
     it {
       should contain_service('haveged').with(
                'ensure' => 'running',
@@ -17,14 +12,10 @@ describe 'haveged::service' do
     }
   end
 
-  context 'On Debian with defined parameters' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with defined parameters' do
     let :params do
       {
-        :service_name => 'foobar',
+        :service_name   => 'foobar',
         :service_enable => 'foo',
         :service_ensure => 'bar',
       }

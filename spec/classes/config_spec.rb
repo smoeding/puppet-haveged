@@ -1,13 +1,8 @@
-# coding: utf-8
 require 'spec_helper'
 
 describe 'haveged::config' do
 
-  context 'On Debian with default parameters' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with default parameters' do
     it {
       should contain_augeas('set-haveged-daemon_args').with_changes(
                "set DAEMON_ARGS '\"\"'"
@@ -15,11 +10,7 @@ describe 'haveged::config' do
     }
   end
 
-  context 'On Debian with parameter buffer_size' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with parameter buffer_size' do
     let :params do
       { :buffer_size => '1103' }
     end
@@ -31,11 +22,7 @@ describe 'haveged::config' do
     }
   end
 
-  context 'On Debian with parameter data_cache_size' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with parameter data_cache_size' do
     let :params do
       { :data_cache_size => '1103' }
     end
@@ -47,11 +34,7 @@ describe 'haveged::config' do
     }
   end
 
-  context 'On Debian with parameter instruction_cache_size' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with parameter instruction_cache_size' do
     let :params do
       { :instruction_cache_size => '1103' }
     end
@@ -63,11 +46,7 @@ describe 'haveged::config' do
     }
   end
 
-  context 'On Debian with parameter write_wakeup_threshold' do
-    let :facts do
-      { :operatingsystem => 'Debian' }
-    end
-
+  context 'with parameter write_wakeup_threshold' do
     let :params do
       { :write_wakeup_threshold => '1103' }
     end
