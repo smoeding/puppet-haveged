@@ -5,7 +5,7 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
+2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with haveged](#setup)
 	* [What haveged affects](#what-haveged-affects)
 	* [Setup requirements](#setup-requirements)
@@ -21,13 +21,17 @@ Install and manage the haveged daemon.
 
 ## Module Description
 
+The haveged daemon provides a random number generator based on the HAVEGE (HArdware Volatile Entropy Gathering and Expansion) algorithm. This module provides a way of installing and setting up the daemon in your environment.
+
 ## Setup
 
 ### What haveged affects
 
+* package/service/configuration files for the haveged daemon
+
 ### Setup Requirements
 
-The haveged module requires the Puppetlabs modules `stdlib`.
+The haveged module requires the Puppetlabs modules `stdlib`. It also uses the `augeas` type so the necessary libraries have to be installed.
 
 ### Beginning with haveged
 
@@ -43,25 +47,57 @@ See the next sections for a detailed description of the available configuration 
 
 ## Usage
 
+### Use a higher threshold of available entropy
+
+```puppet
+class { '::haveged':
+  write_wakeup_threshold => '2048',
+}
+```
+
 ## Reference
 
 ### Classes
 
 #### Public Classes
 
-* `class haveged`
+* `haveged`: The basic setup of the haveged daemon.
 
 #### Private Classes
 
-* `class haveged::config`
-* `class haveged::package`
-* `class haveged::params`
-* `class haveged::service`
+* `haveged::config`: Configures the haveged daemon by updating the run time parameters for the daemon.
+* `haveged::package`: Installs the package.
+* `haveged::params`: Manages the parameters
+* `haveged::service`: Manages the haveged daemon.
+
+#### Class: `haveged`
+
+Main class, includes all other classes.
+
+##### Parameters (all optional)
+
+* `buffer_size`: Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. The default is '128'.
+
+* `data_cache_size`: Set the data cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is '16' or as determined by the CPUID.
+
+* `instruction_cache_size`: Set the instruction cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is '16'* or as determined by the CPUID.
+
+* `write_wakeup_threshold`: Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy below this amount of bits. The value must be string with a numeric value. Default: '1024'
+
+* `service_name`: The name of the service to manage. Normally provided by the `haveged::params` class.
+
+* `service_enable`: Whether the haveged service should be enabled to start at boot. Valued options: 'true', 'false', 'manual'. Default: 'true'.
+
+* `service_ensure`: Whether the haveged service should be running. Valid options: 'stopped', 'false', 'running', 'true'. Default: 'running'.
+
+* `package_name`: The name of the package to manage. Normally provided by the `haveged::params` class.
+
+* `package_ensure`: The state of the haveged package. Valid options: 'present', 'installed', 'absent', 'purged', 'held', 'latest' or a specific package version number. Default: 'present'
 
 ## Limitations
 
-The haveged package is currently developed and tested on Debian 7 (Wheezy). More supported operating systems are planned in future releases.
+The haveged package has been developed and tested on Debian 7 (Wheezy). More supported operating systems are planned in future releases.
 
 ## Development
 
-Feel free to send pull requests for new features.
+Feel free to send pull requests for new features and other operating systems.
