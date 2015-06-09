@@ -31,14 +31,14 @@ The haveged daemon provides a random number generator based on the HAVEGE (HArdw
 
 ### Setup Requirements
 
-The haveged module requires the Puppetlabs modules `stdlib`. It also uses the `augeas` type so the necessary libraries have to be installed.
+The haveged module requires the Puppetlabs modules `stdlib`.
 
 ### Beginning with haveged
 
 Declare the haveged class to install and run the haveged daemon with the default parameters.
 
 ```puppet
-class { '::haveged': }
+class { 'haveged': }
 ```
 
 This installs the haveged package and starts the service.
@@ -50,7 +50,7 @@ See the next sections for a detailed description of the available configuration 
 ### Use a higher threshold of available entropy
 
 ```puppet
-class { '::haveged':
+class { 'haveged':
   write_wakeup_threshold => '2048',
 }
 ```
@@ -76,7 +76,7 @@ Main class, includes all other classes.
 
 ##### Parameters (all optional)
 
-* `buffer_size`: Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. The default is '128'.
+* `buffer_size`: Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. Default: '128'
 
 * `data_cache_size`: Set the data cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is '16' or as determined by the CPUID.
 
@@ -86,9 +86,9 @@ Main class, includes all other classes.
 
 * `service_name`: The name of the service to manage. Normally provided by the `haveged::params` class.
 
-* `service_enable`: Whether the haveged service should be enabled to start at boot. Valued options: 'true', 'false', 'manual'. Default: 'true'.
+* `service_enable`: Whether the haveged service should be enabled to start at boot. Valued options: 'true', 'false'. Default: 'true'
 
-* `service_ensure`: Whether the haveged service should be running. Valid options: 'stopped', 'false', 'running', 'true'. Default: 'running'.
+* `service_ensure`: Whether the haveged service should be running. Valid options: 'stopped', 'false', 'running', 'true'. Default: 'running'
 
 * `package_name`: The name of the package to manage. Normally provided by the `haveged::params` class.
 
