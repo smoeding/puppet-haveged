@@ -5,7 +5,7 @@ describe 'haveged::package' do
   context 'with default parameters' do
     it {
       should contain_package('haveged').with(
-               'ensure' => 'installed',
+               'ensure' => 'present',
                'name'   => 'haveged',
              )
     }

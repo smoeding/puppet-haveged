@@ -23,10 +23,10 @@
 #
 #
 class haveged::service (
-  $service_name   = $::haveged::params::service_name,
+  $service_name   = $haveged::params::service_name,
   $service_ensure = running,
   $service_enable = true,
-) inherits ::haveged::params {
+) inherits haveged::params {
 
   service { 'haveged':
     ensure => $service_ensure,

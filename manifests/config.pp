@@ -5,13 +5,13 @@
 # == Parameters:
 #
 # [*buffer_size*]
-#   The size of the collection buffer in KB. Default: 128
+#   The size of the collection buffer in KB.
 #
 # [*data_cache_size*]
-#   The data cache size in KB. Default is 16 or as determined by cpuid.
+#   The data cache size in KB.
 #
 # [*instruction_cache_size*]
-#   The instruction cache size in KB. Default is 16 or as determined by cpuid.
+#   The instruction cache size in KB.
 #
 # [*write_wakeup_threshold*]
 #   The haveged daemon generates more data if the number of entropy bits
@@ -33,6 +33,20 @@ class haveged::config (
   $write_wakeup_threshold = undef,
 ) {
 
+  # Validate numeric parameters
+  if ($buffer_size != undef) {
+    validate_re($buffer_size, '^[0-9]+$')
+  }
+  if ($data_cache_size != undef) {
+    validate_re($data_cache_size, '^[0-9]+$')
+  }
+  if ($instruction_cache_size != undef) {
+    validate_re($instruction_cache_size, '^[0-9]+$')
+  }
+  if ($write_wakeup_threshold != undef) {
+    validate_re($write_wakeup_threshold, '^[0-9]+$')
+  }
+
   $opts_hash = {
     '-b' => $buffer_size,
     '-d' => $data_cache_size,
@@ -49,6 +63,7 @@ class haveged::config (
   # Join array elements into one string
   $opts = join($opts_strings, ' ')
 
+  # Update configuration
   augeas { 'set-haveged-daemon_args':
     incl    => '/etc/default/haveged',
     lens    => 'Shellvars.lns',

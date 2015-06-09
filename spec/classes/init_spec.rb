@@ -7,7 +7,7 @@ describe 'haveged' do
       should contain_class('haveged')
 
       should contain_class('haveged::package') \
-              .that_requires('Anchor[::haveged::begin]')
+              .that_requires('Anchor[haveged::begin]')
 
       should contain_class('haveged::config') \
               .that_requires('Class[haveged::package]') \
@@ -15,7 +15,7 @@ describe 'haveged' do
               .with('write_wakeup_threshold' => '1024')
 
       should contain_class('haveged::service') \
-              .that_comes_before('Anchor[::haveged::end]')
+              .that_comes_before('Anchor[haveged::end]')
     }
   end
 
@@ -88,7 +88,82 @@ describe 'haveged' do
     }
   end
 
-  context 'On an unsupported operating system' do
+  context 'with package_ensure => true' do
+    let :params do
+      {
+        :package_ensure => true
+      }
+    end
+
+    it {
+      should contain_class('haveged::package').with(
+               'package_ensure' => 'present',
+             )
+
+      should contain_class('haveged::config') \
+              .that_requires('Class[haveged::package]') \
+              .that_notifies('Class[haveged::service]')
+
+      should contain_class('haveged::config')
+
+      should contain_class('haveged::service').with(
+               'service_ensure' => 'running',
+             )
+    }
+  end
+
+  context 'with package_ensure => false' do
+    let :params do
+      {
+        :package_ensure => false
+      }
+    end
+
+    it {
+      should contain_class('haveged::package').with(
+               'package_ensure' => 'purged',
+             )
+      should contain_class('haveged::service').with(
+               'service_ensure' => 'stopped',
+             ).that_comes_before('Class[haveged::package]')
+    }
+  end
+
+  context 'with package_ensure => absent' do
+    let :params do
+      {
+        :package_ensure => 'absent'
+      }
+    end
+
+    it {
+      should contain_class('haveged::package').with(
+               'package_ensure' => 'purged',
+             )
+      should contain_class('haveged::service').with(
+               'service_ensure' => 'stopped',
+             ).that_comes_before('Class[haveged::package]')
+    }
+  end
+
+  context 'with package_ensure => purged' do
+    let :params do
+      {
+        :package_ensure => 'purged'
+      }
+    end
+
+    it {
+      should contain_class('haveged::package').with(
+               'package_ensure' => 'purged',
+             )
+      should contain_class('haveged::service').with(
+               'service_ensure' => 'stopped',
+             ).that_comes_before('Class[haveged::package]')
+    }
+  end
+
+  context 'on an unsupported operating system' do
     let :facts do
       { :operatingsystem => 'VAX/VMS' }
     end

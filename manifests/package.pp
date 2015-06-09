@@ -8,7 +8,7 @@
 #   The name of the package to manage.
 #
 # [*package_ensure*]
-#   Ensure parameter passed onto Package resources.
+#   Ensure parameter passed onto Package resources. Default: 'present'
 #
 # == Requires:
 #
@@ -18,14 +18,14 @@
 #
 #   class { 'haveged::package':
 #     package_name   => 'haveged',
-#     package_ensure => installed,
+#     package_ensure => 'present',
 #   }
 #
 #
 class haveged::package (
-  $package_name   = $::haveged::params::package_name,
-  $package_ensure = installed,
-) inherits ::haveged::params {
+  $package_name   = $haveged::params::package_name,
+  $package_ensure = 'present',
+) inherits haveged::params {
 
   package { 'haveged':
     ensure => $package_ensure,
