@@ -1,0 +1,25 @@
+{
+  "name": "stm-haveged",
+  "version": "0.1.0",
+  "author": "stm",
+  "summary": "Install and manage the HAVEGE daemon.",
+  "license": "BSD-2-Clause",
+  "source": "git@github.com:smoeding/puppet-haveged.git",
+  "project_page": "https://github.com/smoeding/puppet-haveged",
+  "issues_url": "https://github.com/smoeding/puppet-haveged/issues",
+  "tags": [ "entropy", "random" ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7.0"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.2.0"
+    }
+  ]
+}
