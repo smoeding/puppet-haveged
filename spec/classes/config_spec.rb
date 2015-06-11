@@ -2,10 +2,32 @@ require 'spec_helper'
 
 describe 'haveged::config' do
 
-  context 'with default parameters' do
+  context 'on Debian with default parameters' do
+    let :facts do
+      { :operatingsystem => 'Debian' }
+    end
+
     it {
-      should contain_augeas('set-haveged-daemon_args').with_changes(
-               "set DAEMON_ARGS '\"\"'"
+      should contain_file_line('haveged-daemon_args').with(
+               'ensure' => 'present',
+               'match'  => '^DAEMON_ARGS',
+               'line'   => 'DAEMON_ARGS=""',
+               'path'   => '/etc/default/haveged',
+             )
+    }
+  end
+
+  context 'on Ubuntu with default parameters' do
+    let :facts do
+      { :operatingsystem => 'Ubuntu' }
+    end
+
+    it {
+      should contain_file_line('haveged-daemon_args').with(
+               'ensure' => 'present',
+               'match'  => '^DAEMON_ARGS',
+               'line' => 'DAEMON_ARGS=""',
+               'path'   => '/etc/default/haveged',
              )
     }
   end
@@ -16,8 +38,8 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_augeas('set-haveged-daemon_args').with_changes(
-               "set DAEMON_ARGS '\"-b 1103\"'"
+      should contain_file_line('haveged-daemon_args').with_line(
+               'DAEMON_ARGS="-b 1103"'
              )
     }
   end
@@ -28,8 +50,8 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_augeas('set-haveged-daemon_args').with_changes(
-               "set DAEMON_ARGS '\"-d 1103\"'"
+      should contain_file_line('haveged-daemon_args').with_line(
+               'DAEMON_ARGS="-d 1103"'
              )
     }
   end
@@ -40,8 +62,8 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_augeas('set-haveged-daemon_args').with_changes(
-               "set DAEMON_ARGS '\"-i 1103\"'"
+      should contain_file_line('haveged-daemon_args').with_line(
+               'DAEMON_ARGS="-i 1103"'
              )
     }
   end
@@ -52,8 +74,8 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_augeas('set-haveged-daemon_args').with_changes(
-               "set DAEMON_ARGS '\"-w 1103\"'"
+      should contain_file_line('haveged-daemon_args').with_line(
+               'DAEMON_ARGS="-w 1103"'
              )
     }
   end

@@ -18,9 +18,12 @@
 class haveged::params {
 
   case $::operatingsystem {
-    'Debian': {
+    'Debian', 'Ubuntu': {
       $package_name = 'haveged'
       $service_name = 'haveged'
+
+      $daemon_options_file = '/etc/default/haveged'
+      $daemon_options_args = 'DAEMON_ARGS'
     }
     default: {
       fail("Unsupported operatingsystem ${::operatingsystem}")

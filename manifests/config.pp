@@ -31,7 +31,7 @@ class haveged::config (
   $data_cache_size        = undef,
   $instruction_cache_size = undef,
   $write_wakeup_threshold = undef,
-) {
+) inherits haveged::params {
 
   # Validate numeric parameters
   if ($buffer_size != undef) {
@@ -64,9 +64,10 @@ class haveged::config (
   $opts = join($opts_strings, ' ')
 
   # Update configuration
-  augeas { 'set-haveged-daemon_args':
-    incl    => '/etc/default/haveged',
-    lens    => 'Shellvars.lns',
-    changes => "set DAEMON_ARGS '\"${opts}\"'",
+  file_line { 'haveged-daemon_args':
+    ensure => 'present',
+    match  => "^${::haveged::params::daemon_options_args}",
+    line   => "${::haveged::params::daemon_options_args}=\"${opts}\"",
+    path   => $::haveged::params::daemon_options_file,
   }
 }
