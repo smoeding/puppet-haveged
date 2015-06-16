@@ -96,7 +96,14 @@ Main class, includes all other classes.
 
 ## Limitations
 
-The haveged package has been developed and tested on Debian 7 (Wheezy). More supported operating systems are planned in future releases.
+The haveged package has been tested on
+
+* Debian 6 (Squeeze)
+* Debian 7 (Wheezy)
+* Ubuntu 12.04 (Precise Pangolin)
+* Ubuntu 14.04 (Trusty Tahr)
+* Ubuntu 15.04 (Vivid Vervet)
+* CentOS 6.6
 
 ## Development
 

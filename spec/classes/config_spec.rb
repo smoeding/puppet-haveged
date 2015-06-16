@@ -32,6 +32,23 @@ describe 'haveged::config' do
     }
   end
 
+  context 'on RedHat with default parameters' do
+    let :facts do
+      { :operatingsystem => 'RedHat' }
+    end
+
+    it { should_not contain_file_line('haveged-daemon_args') }
+  end
+
+
+  context 'on CentOS with default parameters' do
+    let :facts do
+      { :operatingsystem => 'CentOS' }
+    end
+
+    it { should_not contain_file_line('haveged-daemon_args') }
+  end
+
   context 'with parameter buffer_size' do
     let :params do
       { :buffer_size => '1103' }
