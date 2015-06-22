@@ -74,8 +74,8 @@ class haveged::config (
   }
 
   # Update systemd configuration file
-  if ($systemd_options_file != undef) {
-    file { $systemd_options_file:
+  if ($::haveged::params::systemd_options_file != undef) {
+    file { $::haveged::params::systemd_options_file:
       ensure  => file,
       owner   => 'root',
       group   => 'root',
