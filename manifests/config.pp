@@ -33,39 +33,38 @@ class haveged::config (
   $write_wakeup_threshold = undef,
 ) inherits haveged::params {
 
+  # Validate numeric parameters
+  if ($buffer_size != undef) {
+    validate_re($buffer_size, '^[0-9]+$')
+  }
+  if ($data_cache_size != undef) {
+    validate_re($data_cache_size, '^[0-9]+$')
+  }
+  if ($instruction_cache_size != undef) {
+    validate_re($instruction_cache_size, '^[0-9]+$')
+  }
+  if ($write_wakeup_threshold != undef) {
+    validate_re($write_wakeup_threshold, '^[0-9]+$')
+  }
+
+  $opts_hash = {
+    '-b' => $buffer_size,
+    '-d' => $data_cache_size,
+    '-i' => $instruction_cache_size,
+    '-w' => $write_wakeup_threshold,
+  }
+
+  # Remove all entries where the value is 'undef'
+  $opts_ok = delete_undef_values($opts_hash)
+
+  # Concat key and value into array elements
+  $opts_strings = join_keys_to_values($opts_ok, ' ')
+
+  # Join array elements into one string
+  $opts = join($opts_strings, ' ')
+
+  # Update shell configuration file
   if ($::haveged::params::daemon_options_file != undef) {
-
-    # Validate numeric parameters
-    if ($buffer_size != undef) {
-      validate_re($buffer_size, '^[0-9]+$')
-    }
-    if ($data_cache_size != undef) {
-      validate_re($data_cache_size, '^[0-9]+$')
-    }
-    if ($instruction_cache_size != undef) {
-      validate_re($instruction_cache_size, '^[0-9]+$')
-    }
-    if ($write_wakeup_threshold != undef) {
-      validate_re($write_wakeup_threshold, '^[0-9]+$')
-    }
-
-    $opts_hash = {
-      '-b' => $buffer_size,
-      '-d' => $data_cache_size,
-      '-i' => $instruction_cache_size,
-      '-w' => $write_wakeup_threshold,
-    }
-
-    # Remove all entries where the value is 'undef'
-    $opts_ok = delete_undef_values($opts_hash)
-
-    # Concat key and value into array elements
-    $opts_strings = join_keys_to_values($opts_ok, ' ')
-
-    # Join array elements into one string
-    $opts = join($opts_strings, ' ')
-
-    # Update configuration
     file_line { 'haveged-daemon_args':
       ensure => 'present',
       match  => "^${::haveged::params::daemon_options_args}",
@@ -73,19 +72,15 @@ class haveged::config (
       path   => $::haveged::params::daemon_options_file,
     }
   }
-  else {
-    # No configuration file available on this operating system,
-    # so there is no place to set the daemon arguments.
 
-    $nr_defined_opts = count([
-        $buffer_size,
-        $data_cache_size,
-        $instruction_cache_size,
-        $write_wakeup_threshold
-    ])
-
-    if ($nr_defined_opts > 0) {
-      warn("Class parameters ignored on ${::operatingsystem}")
+  # Update systemd configuration file
+  if ($systemd_options_file != undef) {
+    file { $systemd_options_file:
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('haveged/systemd.erb'),
     }
   }
 }
