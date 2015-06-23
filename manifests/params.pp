@@ -27,7 +27,8 @@ class haveged::params {
       $daemon_options_args = 'DAEMON_ARGS'
 
       # systemd configuration
-      $systemd_options_file = undef
+      $systemd_base = undef
+      $systemd_options_dir = undef
     }
     'CentOS', 'RedHat': {
       $package_name = 'haveged'
@@ -38,7 +39,8 @@ class haveged::params {
       $daemon_options_args = undef
 
       # systemd configuration
-      $systemd_options_file = '/etc/systemd/system/multi-user.target.wants/haveged.service'
+      $systemd_base = '/etc/systemd/system/'
+      $systemd_options_dir = "${systemd_base}/${service_name}.service.d"
     }
     default: {
       fail("Unsupported operatingsystem ${::operatingsystem}")
