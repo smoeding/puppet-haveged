@@ -63,8 +63,9 @@ class haveged::config (
   # Join array elements into one string
   $opts = join($opts_strings, ' ')
 
-  # Update shell configuration file
+  # Update shell configuration file if applicable
   if ($::haveged::params::daemon_options_file != undef) {
+
     file_line { 'haveged-daemon_args':
       ensure => 'present',
       match  => "^${::haveged::params::daemon_options_args}",
@@ -73,7 +74,7 @@ class haveged::config (
     }
   }
 
-  # Update systemd configuration file
+  # Update systemd configuration file if applicable
   if ($::haveged::params::systemd_options_dir != undef) {
 
     file { $::haveged::params::systemd_options_dir:

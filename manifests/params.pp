@@ -39,7 +39,7 @@ class haveged::params {
       $daemon_options_args = undef
 
       # systemd configuration
-      $systemd_base = '/etc/systemd/system/'
+      $systemd_base = '/etc/systemd/system'
       $systemd_options_dir = "${systemd_base}/${service_name}.service.d"
     }
     default: {
