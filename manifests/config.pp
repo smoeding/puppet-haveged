@@ -64,27 +64,27 @@ class haveged::config (
   $opts = join($opts_strings, ' ')
 
   # Update shell configuration file if applicable
-  if ($::haveged::params::daemon_options_file != undef) {
+  if ($::haveged::params::daemon_opts_file != undef) {
 
     file_line { 'haveged-daemon_args':
       ensure => 'present',
-      match  => "^${::haveged::params::daemon_options_args}",
-      line   => "${::haveged::params::daemon_options_args}=\"${opts}\"",
-      path   => $::haveged::params::daemon_options_file,
+      match  => "^${::haveged::params::daemon_opts_args}",
+      line   => "${::haveged::params::daemon_opts_args}=\"${opts}\"",
+      path   => $::haveged::params::daemon_opts_file,
     }
   }
 
   # Update systemd configuration file if applicable
-  if ($::haveged::params::systemd_options_dir != undef) {
+  if ($::haveged::params::systemd_opts_dir != undef) {
 
-    file { $::haveged::params::systemd_options_dir:
+    file { $::haveged::params::systemd_opts_dir:
       ensure => directory,
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
     }
 
-    file { "${::haveged::params::systemd_options_dir}/opts.conf":
+    file { "${::haveged::params::systemd_opts_dir}/opts.conf":
       ensure  => file,
       owner   => 'root',
       group   => 'root',
