@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 RSpec.configure do |c|
@@ -7,3 +8,5 @@ RSpec.configure do |c|
     :operatingsystemmajrelease => '7',
   }
 end
+
+at_exit { RSpec::Puppet::Coverage::report! }

@@ -6,6 +6,8 @@ describe 'haveged' do
     it {
       should contain_class('haveged')
 
+      should contain_class('haveged::params')
+
       should contain_class('haveged::package') \
               .that_requires('Anchor[haveged::begin]')
 
