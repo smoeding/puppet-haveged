@@ -4,9 +4,13 @@ describe 'haveged' do
 
   context 'with all default parameters' do
     it {
+
       should contain_class('haveged')
 
       should contain_class('haveged::params')
+
+      should contain_anchor('haveged::begin')
+      should contain_anchor('haveged::end')
 
       should contain_class('haveged::package') \
               .that_requires('Anchor[haveged::begin]')

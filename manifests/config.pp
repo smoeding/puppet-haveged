@@ -66,11 +66,12 @@ class haveged::config (
   # Update shell configuration file if applicable
   if ($::haveged::params::daemon_opts_file != undef) {
 
-    file_line { 'haveged-daemon_args':
-      ensure => 'present',
-      match  => "^${::haveged::params::daemon_opts_args}",
-      line   => "${::haveged::params::daemon_opts_args}=\"${opts}\"",
-      path   => $::haveged::params::daemon_opts_file,
+    file { $::haveged::params::daemon_opts_file:
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('haveged/default.erb'),
     }
   }
 

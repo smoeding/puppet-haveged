@@ -34,7 +34,7 @@
 #
 # == Requires:
 #
-# Augeas bindings for Puppet. Puppetlabs stdlib module.
+# Puppetlabs stdlib module.
 #
 # == Sample Usage:
 #

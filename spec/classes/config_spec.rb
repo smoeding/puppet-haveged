@@ -5,19 +5,21 @@ describe 'haveged::config' do
   context 'on Debian with default parameters' do
     let :facts do
       {
-        :operatingsystem           => 'Debian',
-        :operatingsystemmajrelease => '7',
+        :operatingsystem => 'Debian',
+        :haveged_startup_provider => 'init',
       }
     end
 
     it {
-      should contain_file_line('haveged-daemon_args') \
+      should contain_file('/etc/default/haveged') \
               .with(
-                'ensure' => 'present',
-                'match'  => '^DAEMON_ARGS',
-                'line'   => 'DAEMON_ARGS=""',
-                'path'   => '/etc/default/haveged',
-              )
+                'ensure' => 'file',
+                'owner'  => 'root',
+                'group'  => 'root',
+                'mode'   => '0644',
+              ).with_content(/^DAEMON_ARGS=""/)
+
+      should_not contain_file('/etc/systemd/system/haveged.service.d')
 
       should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
     }
@@ -26,73 +28,87 @@ describe 'haveged::config' do
   context 'on Ubuntu with default parameters' do
     let :facts do
       {
-        :operatingsystem        => 'Ubuntu',
-        :operatingsystemrelease => '14.04',
+        :operatingsystem => 'Ubuntu',
+        :haveged_startup_provider => 'init',
       }
     end
 
     it {
-      should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+      should contain_file('/etc/default/haveged') \
               .with(
-                'ensure'  => 'file',
-                'owner'   => 'root',
-                'group'   => 'root',
-                'mode'    => '0644',
-              ).with_content(/^ExecStart=.*haveged  -v 1 --Foreground/)
+                'ensure' => 'file',
+                'owner'  => 'root',
+                'group'  => 'root',
+                'mode'   => '0644',
+              ).with_content(/^DAEMON_ARGS=""/)
 
-      should_not contain_file_line('haveged-daemon_args')
+      should_not contain_file('/etc/systemd/system/haveged.service.d')
+
+      should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
     }
   end
 
   context 'on RedHat with default parameters' do
     let :facts do
       {
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7',
+        :operatingsystem => 'RedHat',
+        :haveged_startup_provider => 'systemd',
       }
     end
 
     it {
+      should contain_file('/etc/systemd/system/haveged.service.d') \
+              .with(
+                'ensure' => 'directory',
+                'owner'   => 'root',
+                'group'   => 'root',
+                'mode'    => '0755',
+              )
+
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with(
                 'ensure'  => 'file',
                 'owner'   => 'root',
                 'group'   => 'root',
                 'mode'    => '0644',
-              ).with_content(/^ExecStart=.*haveged  -v 1 --Foreground/)
+              ).with_content(/^ExecStart=.*haveged --Foreground --verbose=1/)
 
-      should_not contain_file_line('haveged-daemon_args')
+      should_not contain_file('/etc/default/haveged')
     }
   end
-
 
   context 'on CentOS with default parameters' do
     let :facts do
       {
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7',
+        :operatingsystem => 'CentOS',
+        :haveged_startup_provider => 'systemd',
       }
     end
 
     it {
+      should contain_file('/etc/systemd/system/haveged.service.d') \
+              .with(
+                'ensure' => 'directory',
+                'owner'   => 'root',
+                'group'   => 'root',
+                'mode'    => '0755',
+              )
+
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with(
                 'ensure'  => 'file',
                 'owner'   => 'root',
                 'group'   => 'root',
                 'mode'    => '0644',
-              ).with_content(/^ExecStart=.*haveged  -v 1 --Foreground/)
+              ).with_content(/^ExecStart=.*haveged --Foreground --verbose=1/)
 
-      should_not contain_file_line('haveged-daemon_args')
+      should_not contain_file('/etc/default/haveged')
     }
   end
 
-  context 'on Debian with parameter buffer_size' do
+  context 'using init startup with parameter buffer_size' do
     let :facts do
-      {
-        :operatingsystem           => 'Debian',
-        :operatingsystemmajrelease => '7',
-      }
+      { :haveged_startup_provider => 'init' }
     end
 
     let :params do
@@ -100,17 +116,14 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_file_line('haveged-daemon_args') \
-              .with_line('DAEMON_ARGS="-b 1103"')
+      should contain_file('/etc/default/haveged') \
+              .with_content(/^DAEMON_ARGS="-b 1103"/)
     }
   end
 
-  context 'on CentOS with parameter buffer_size' do
+  context 'using systemd startup with parameter buffer_size' do
     let :facts do
-      {
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7',
-      }
+      { :haveged_startup_provider => 'systemd' }
     end
 
     let :params do
@@ -119,16 +132,13 @@ describe 'haveged::config' do
 
     it {
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with_content(/^ExecStart=.*haveged -b 1103 -v 1 --Foreground/)
+              .with_content(/^ExecStart=.*haveged --Foreground --verbose=1 -b 1103/)
     }
   end
 
-  context 'on Debian with parameter data_cache_size' do
+  context 'using init startup with parameter data_cache_size' do
     let :facts do
-      {
-        :operatingsystem           => 'Debian',
-        :operatingsystemmajrelease => '7',
-      }
+      { :haveged_startup_provider => 'init' }
     end
 
     let :params do
@@ -136,17 +146,14 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_file_line('haveged-daemon_args') \
-              .with_line('DAEMON_ARGS="-d 1103"')
+      should contain_file('/etc/default/haveged') \
+              .with_content(/^DAEMON_ARGS="-d 1103"/)
     }
   end
 
-  context 'on CentOS with parameter data_cache_size' do
+  context 'using systemd startup with parameter data_cache_size' do
     let :facts do
-      {
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7',
-      }
+      { :haveged_startup_provider => 'systemd' }
     end
 
     let :params do
@@ -155,16 +162,13 @@ describe 'haveged::config' do
 
     it {
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with_content(/^ExecStart=.*haveged -d 1103 -v 1 --Foreground/)
+              .with_content(/^ExecStart=.*haveged --Foreground --verbose=1 -d 1103/)
     }
   end
 
-  context 'on Debian with parameter instruction_cache_size' do
+  context 'using init startup with parameter instruction_cache_size' do
     let :facts do
-      {
-        :operatingsystem           => 'Debian',
-        :operatingsystemmajrelease => '7',
-      }
+      { :haveged_startup_provider => 'init' }
     end
 
     let :params do
@@ -172,17 +176,14 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_file_line('haveged-daemon_args') \
-              .with_line('DAEMON_ARGS="-i 1103"')
+      should contain_file('/etc/default/haveged') \
+              .with_content(/^DAEMON_ARGS="-i 1103"/)
     }
   end
 
-  context 'on CentOS with parameter instruction_cache_size' do
+  context 'using systemd startup with parameter instruction_cache_size' do
     let :facts do
-      {
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7',
-      }
+      { :haveged_startup_provider => 'systemd' }
     end
 
     let :params do
@@ -191,16 +192,13 @@ describe 'haveged::config' do
 
     it {
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with_content(/^ExecStart=.*haveged -i 1103 -v 1 --Foreground/)
+              .with_content(/^ExecStart=.*haveged --Foreground --verbose=1 -i 1103/)
     }
   end
 
-  context 'on Debian with parameter write_wakeup_threshold' do
+  context 'using init startup with parameter write_wakeup_threshold' do
     let :facts do
-      {
-        :operatingsystem           => 'Debian',
-        :operatingsystemmajrelease => '7',
-      }
+      { :haveged_startup_provider => 'init' }
     end
 
     let :params do
@@ -208,17 +206,14 @@ describe 'haveged::config' do
     end
 
     it {
-      should contain_file_line('haveged-daemon_args') \
-              .with_line('DAEMON_ARGS="-w 1103"')
+      should contain_file('/etc/default/haveged') \
+              .with_content(/^DAEMON_ARGS="-w 1103"$/)
     }
   end
 
-  context 'on CentOS with parameter write_wakeup_threshold' do
+  context 'using systemd startup with parameter write_wakeup_threshold' do
     let :facts do
-      {
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7',
-      }
+      { :haveged_startup_provider => 'systemd' }
     end
 
     let :params do
@@ -227,7 +222,7 @@ describe 'haveged::config' do
 
     it {
       should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with_content(/^ExecStart=.*haveged -w 1103 -v 1 --Foreground/)
+              .with_content(/^ExecStart=.*haveged --Foreground --verbose=1 -w 1103$/)
     }
   end
 end
