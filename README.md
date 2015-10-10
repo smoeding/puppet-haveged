@@ -27,11 +27,19 @@ The haveged daemon provides a random number generator based on the HAVEGE (HArdw
 
 ### What haveged affects
 
-* package/service/configuration files for the haveged daemon
+Package, service and configuration files for the haveged daemon.
+
+* On Debian based systems this includes the `/etc/default/haveged` file if an `init` based startup system is used. For systems using `systemd` the configuration is stored in the `/etc/systemd/system/haveged.service.d/opts.conf` file.
+
+* On RHEL 6 systems the configuration is unfortunately hardcoded and no configuration file is used.
+
+* On RHEL 7 systems the configuration is stored in the `/etc/systemd/system/haveged.service.d/opts.conf` file.
 
 ### Setup Requirements
 
 The haveged module requires the Puppetlabs modules `stdlib`.
+
+The `haveged` package is part of the EPEL yum repository, so this must be enabled on Enterprise Linux.
 
 ### Beginning with haveged
 
@@ -94,16 +102,26 @@ Main class, includes all other classes.
 
 * `package_ensure`: The state of the haveged package. Valid options: 'present', 'installed', 'absent', 'purged', 'held', 'latest' or a specific package version number. Default: 'present'
 
+### Facts
+
+This module provides the following facts:
+
+* `haveged_startup_provider`: The startup system used on the node. The value of the fact can either be `systemd` or `init`.
+
 ## Limitations
 
-The haveged package has been tested on
+Unfortunately the configuration is hardcoded on RHEL 6 systems. Using class parameters to set specific options will have no effect.
+
+The `haveged` module has been tested on
 
 * Debian 6 (Squeeze)
 * Debian 7 (Wheezy)
+* Debian 8 (Jessie)
 * Ubuntu 12.04 (Precise Pangolin)
 * Ubuntu 14.04 (Trusty Tahr)
 * Ubuntu 15.04 (Vivid Vervet)
-* CentOS 6.6
+* CentOS 6
+* CentOS 7
 
 ## Development
 
