@@ -4,7 +4,7 @@
   "author": "stm",
   "summary": "Install and manage the HAVEGE daemon.",
   "license": "BSD-2-Clause",
-  "source": "git@github.com:smoeding/puppet-haveged.git",
+  "source": "git://github.com/smoeding/puppet-haveged.git",
   "project_page": "https://github.com/smoeding/puppet-haveged",
   "issues_url": "https://github.com/smoeding/puppet-haveged/issues",
   "tags": [ "entropy", "random" ],
