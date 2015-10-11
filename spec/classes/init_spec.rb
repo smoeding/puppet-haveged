@@ -171,11 +171,14 @@ describe 'haveged' do
 
   context 'on an unsupported operating system' do
     let :facts do
-      { :operatingsystem => 'VAX/VMS' }
+      {
+        :osfamily => 'VMS',
+        :operatingsystem => 'VAX/VMS'
+      }
     end
 
     it {
-      expect { subject.call }.to raise_error(/Unsupported operatingsystem/)
+      expect { subject.call }.to raise_error(/Unsupported osfamily VMS/)
     }
   end
 end

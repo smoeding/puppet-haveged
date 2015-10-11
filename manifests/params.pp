@@ -17,8 +17,8 @@
 #
 class haveged::params {
 
-  case $::operatingsystem {
-    'Debian', 'Ubuntu': {
+  case $::osfamily {
+    'Debian': {
       $package_name = 'haveged'
       $service_name = 'haveged'
 
@@ -36,7 +36,7 @@ class haveged::params {
         }
       }
     }
-    'CentOS', 'RedHat': {
+    'RedHat': {
       $package_name = 'haveged'
       $service_name = 'haveged'
 
@@ -55,7 +55,7 @@ class haveged::params {
       }
     }
     default: {
-      fail("Unsupported operatingsystem ${::operatingsystem}")
+      fail("Unsupported osfamily ${::osfamily}")
     }
   }
 }

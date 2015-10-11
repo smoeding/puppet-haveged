@@ -5,6 +5,7 @@ describe 'haveged::config' do
   context 'on Debian with default parameters' do
     let :facts do
       {
+        :osfamily => 'Debian',
         :operatingsystem => 'Debian',
         :haveged_startup_provider => 'init',
       }
@@ -28,6 +29,7 @@ describe 'haveged::config' do
   context 'on Ubuntu with default parameters' do
     let :facts do
       {
+        :osfamily => 'Debian',
         :operatingsystem => 'Ubuntu',
         :haveged_startup_provider => 'init',
       }
@@ -51,6 +53,7 @@ describe 'haveged::config' do
   context 'on RedHat with default parameters' do
     let :facts do
       {
+        :osfamily => 'Redhat',
         :operatingsystem => 'RedHat',
         :haveged_startup_provider => 'systemd',
       }
@@ -80,6 +83,7 @@ describe 'haveged::config' do
   context 'on CentOS with default parameters' do
     let :facts do
       {
+        :osfamily => 'Redhat',
         :operatingsystem => 'CentOS',
         :haveged_startup_provider => 'systemd',
       }
