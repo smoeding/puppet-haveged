@@ -4,10 +4,9 @@ describe 'haveged::package' do
 
   context 'with default parameters' do
     it {
-      should contain_package('haveged').with(
-               'ensure' => 'present',
-               'name'   => 'haveged',
-             )
+      should contain_package('haveged') \
+              .with_ensure('present') \
+              .with_name('haveged')
     }
   end
 
@@ -17,10 +16,9 @@ describe 'haveged::package' do
     end
 
     it {
-      should contain_package('haveged').with(
-               'ensure' => 'foo',
-               'name'   => 'foobar',
-             )
+      should contain_package('haveged') \
+              .with_ensure('foo') \
+              .with_name('foobar')
     }
   end
 end

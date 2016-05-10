@@ -13,15 +13,13 @@ describe 'haveged::config' do
 
     it {
       should contain_file('/etc/default/haveged') \
-              .with(
-                'ensure' => 'file',
-                'owner'  => 'root',
-                'group'  => 'root',
-                'mode'   => '0644',
-              ).with_content(/^DAEMON_ARGS=""/)
+              .with_ensure('file') \
+              .with_owner('root') \
+              .with_group('root') \
+              .with_mode('0644') \
+              .with_content(/^DAEMON_ARGS=""/)
 
       should_not contain_file('/etc/systemd/system/haveged.service.d')
-
       should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
     }
   end
@@ -45,7 +43,6 @@ describe 'haveged::config' do
               ).with_content(/^DAEMON_ARGS=""/)
 
       should_not contain_file('/etc/systemd/system/haveged.service.d')
-
       should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
     }
   end

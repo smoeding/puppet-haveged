@@ -4,11 +4,10 @@ describe 'haveged::service' do
 
   context 'with default parameters' do
     it {
-      should contain_service('haveged').with(
-               'ensure' => 'running',
-               'enable' => 'true',
-               'name'   => 'haveged',
-             )
+      should contain_service('haveged') \
+              .with_ensure('running') \
+              .with_enable('true') \
+              .with_name('haveged')
     }
   end
 
@@ -22,11 +21,10 @@ describe 'haveged::service' do
     end
 
     it {
-      should contain_service('haveged').with(
-               'ensure' => 'bar',
-               'enable' => 'foo',
-               'name'   => 'foobar',
-             )
+      should contain_service('haveged') \
+              .with_ensure('bar') \
+              .with_enable('foo') \
+              .with_name('foobar')
     }
   end
 end

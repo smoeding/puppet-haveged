@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe 'haveged' do
 
-  context 'with all default parameters' do
+  context 'with default parameters' do
     it {
-
       should contain_class('haveged')
 
       should contain_class('haveged::params')
@@ -16,9 +15,9 @@ describe 'haveged' do
               .that_requires('Anchor[haveged::begin]')
 
       should contain_class('haveged::config') \
+              .with_write_wakeup_threshold('1024') \
               .that_requires('Class[haveged::package]') \
-              .that_notifies('Class[haveged::service]') \
-              .with('write_wakeup_threshold' => '1024')
+              .that_notifies('Class[haveged::service]')
 
       should contain_class('haveged::service') \
               .that_comes_before('Anchor[haveged::end]')
@@ -44,14 +43,16 @@ describe 'haveged' do
 
   context 'with package parameters defined' do
     let :params do
-      { :package_name => 'foobar', :package_ensure => 'foo' }
+      {
+        :package_name   => 'foobar',
+        :package_ensure => 'foo'
+      }
     end
 
     it {
-      should contain_class('haveged::package').with(
-               'package_name'   => 'foobar',
-               'package_ensure' => 'foo',
-             )
+      should contain_class('haveged::package') \
+              .with_package_name('foobar') \
+              .with_package_ensure('foo')
     }
   end
 
@@ -65,11 +66,10 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::service').with(
-               'service_name'   => 'foobar',
-               'service_enable' => 'foo',
-               'service_ensure' => 'bar',
-             )
+      should contain_class('haveged::service') \
+              .with_service_name('foobar') \
+              .with_service_enable('foo') \
+              .with_service_ensure('bar')
     }
   end
 
@@ -85,12 +85,11 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::config').with(
-               'buffer_size'            => '2',
-               'data_cache_size'        => '3',
-               'instruction_cache_size' => '5',
-               'write_wakeup_threshold' => '7'
-             )
+      should contain_class('haveged::config') \
+              .with_buffer_size('2') \
+              .with_data_cache_size('3') \
+              .with_instruction_cache_size('5') \
+              .with_write_wakeup_threshold('7')
     }
   end
 
@@ -102,9 +101,8 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::package').with(
-               'package_ensure' => 'present',
-             )
+      should contain_class('haveged::package') \
+              .with_package_ensure('present')
 
       should contain_class('haveged::config') \
               .that_requires('Class[haveged::package]') \
@@ -112,9 +110,8 @@ describe 'haveged' do
 
       should contain_class('haveged::config')
 
-      should contain_class('haveged::service').with(
-               'service_ensure' => 'running',
-             )
+      should contain_class('haveged::service') \
+              .with_service_ensure('running')
     }
   end
 
@@ -126,12 +123,12 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::package').with(
-               'package_ensure' => 'purged',
-             )
-      should contain_class('haveged::service').with(
-               'service_ensure' => 'stopped',
-             ).that_comes_before('Class[haveged::package]')
+      should contain_class('haveged::package') \
+              .with_package_ensure('purged')
+
+      should contain_class('haveged::service') \
+              .with_service_ensure('stopped') \
+              .that_comes_before('Class[haveged::package]')
     }
   end
 
@@ -143,12 +140,12 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::package').with(
-               'package_ensure' => 'purged',
-             )
-      should contain_class('haveged::service').with(
-               'service_ensure' => 'stopped',
-             ).that_comes_before('Class[haveged::package]')
+      should contain_class('haveged::package') \
+              .with_package_ensure('purged')
+
+      should contain_class('haveged::service') \
+              .with_service_ensure('stopped') \
+              .that_comes_before('Class[haveged::package]')
     }
   end
 
@@ -160,25 +157,20 @@ describe 'haveged' do
     end
 
     it {
-      should contain_class('haveged::package').with(
-               'package_ensure' => 'purged',
-             )
-      should contain_class('haveged::service').with(
-               'service_ensure' => 'stopped',
-             ).that_comes_before('Class[haveged::package]')
+      should contain_class('haveged::package') \
+              .with_package_ensure('purged')
+
+      should contain_class('haveged::service') \
+              .with_service_ensure('stopped') \
+              .that_comes_before('Class[haveged::package]')
     }
   end
 
   context 'on an unsupported operating system' do
     let :facts do
-      {
-        :osfamily => 'VMS',
-        :operatingsystem => 'VAX/VMS'
-      }
+      { :osfamily => 'VMS', :operatingsystem => 'VAX/VMS' }
     end
 
-    it {
-      expect { subject.call }.to raise_error(/Unsupported osfamily VMS/)
-    }
+    it { is_expected.to raise_error Puppet::Error, /Unsupported osfamily VMS/ }
   end
 end
