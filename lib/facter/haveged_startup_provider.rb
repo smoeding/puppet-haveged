@@ -1,5 +1,5 @@
 # Return the provider of the init system by looking at PID 1
-Facter.add("haveged_startup_provider") do
+Facter.add(:haveged_startup_provider) do
  confine :kernel => 'Linux'
  setcode do
    begin
