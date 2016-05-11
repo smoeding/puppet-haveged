@@ -2,109 +2,60 @@ require 'spec_helper'
 
 describe 'haveged::config' do
 
-  context 'on Debian with default parameters' do
-    let :facts do
-      {
-        :osfamily => 'Debian',
-        :operatingsystem => 'Debian',
-        :haveged_startup_provider => 'init',
-      }
+  on_supported_os.each do |os, facts|
+
+    osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+    osver = "#{facts[:operatingsystem]}-#{osrel}"
+
+    context "on #{os} with default parameters" do
+      case osver
+      when 'Debian-6', 'Debian-7',
+           'Ubuntu-12.04', 'Ubuntu-14.04', 'Ubuntu-15.04'
+        let(:facts) { facts.merge({ :haveged_startup_provider => 'init' }) }
+
+        it {
+          should contain_file('/etc/default/haveged') \
+                  .with_ensure('file') \
+                  .with_owner('root') \
+                  .with_group('root') \
+                  .with_mode('0644') \
+                  .with_content(/^DAEMON_ARGS=""/)
+
+          should_not contain_file('/etc/systemd/system/haveged.service.d')
+          should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
+        }
+
+      when 'Debian-8'
+        let(:facts) { facts.merge({ :haveged_startup_provider => 'systemd' }) }
+
+      when 'Scientific-6', 'CentOS-6', 'RedHat-6', 'OracleLinux-6'
+        let(:facts) { facts.merge({ :haveged_startup_provider => 'init' }) }
+
+      when 'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
+        let(:facts) { facts.merge({ :haveged_startup_provider => 'systemd' }) }
+
+        it {
+          should contain_file('/etc/systemd/system/haveged.service.d') \
+                  .with_ensure('directory') \
+                  .with_owner('root') \
+                  .with_group('root') \
+                  .with_mode('0755')
+
+          should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+                  .with_ensure('file') \
+                  .with_owner('root') \
+                  .with_group('root') \
+                  .with_mode('0644') \
+                  .with_content(/^ExecStart=.*haveged --Foreground --verbose=1/)
+
+          should_not contain_file('/etc/default/haveged')
+        }
+
+      else
+        # fail if actual os is not tested here
+        it { expect('osver').to eq(osver) }
+      end
     end
-
-    it {
-      should contain_file('/etc/default/haveged') \
-              .with_ensure('file') \
-              .with_owner('root') \
-              .with_group('root') \
-              .with_mode('0644') \
-              .with_content(/^DAEMON_ARGS=""/)
-
-      should_not contain_file('/etc/systemd/system/haveged.service.d')
-      should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
-    }
-  end
-
-  context 'on Ubuntu with default parameters' do
-    let :facts do
-      {
-        :osfamily => 'Debian',
-        :operatingsystem => 'Ubuntu',
-        :haveged_startup_provider => 'init',
-      }
-    end
-
-    it {
-      should contain_file('/etc/default/haveged') \
-              .with(
-                'ensure' => 'file',
-                'owner'  => 'root',
-                'group'  => 'root',
-                'mode'   => '0644',
-              ).with_content(/^DAEMON_ARGS=""/)
-
-      should_not contain_file('/etc/systemd/system/haveged.service.d')
-      should_not contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
-    }
-  end
-
-  context 'on RedHat with default parameters' do
-    let :facts do
-      {
-        :osfamily => 'Redhat',
-        :operatingsystem => 'RedHat',
-        :haveged_startup_provider => 'systemd',
-      }
-    end
-
-    it {
-      should contain_file('/etc/systemd/system/haveged.service.d') \
-              .with(
-                'ensure' => 'directory',
-                'owner'   => 'root',
-                'group'   => 'root',
-                'mode'    => '0755',
-              )
-
-      should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with(
-                'ensure'  => 'file',
-                'owner'   => 'root',
-                'group'   => 'root',
-                'mode'    => '0644',
-              ).with_content(/^ExecStart=.*haveged --Foreground --verbose=1/)
-
-      should_not contain_file('/etc/default/haveged')
-    }
-  end
-
-  context 'on CentOS with default parameters' do
-    let :facts do
-      {
-        :osfamily => 'Redhat',
-        :operatingsystem => 'CentOS',
-        :haveged_startup_provider => 'systemd',
-      }
-    end
-
-    it {
-      should contain_file('/etc/systemd/system/haveged.service.d') \
-              .with(
-                'ensure' => 'directory',
-                'owner'   => 'root',
-                'group'   => 'root',
-                'mode'    => '0755',
-              )
-
-      should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-              .with(
-                'ensure'  => 'file',
-                'owner'   => 'root',
-                'group'   => 'root',
-                'mode'    => '0644',
-              ).with_content(/^ExecStart=.*haveged --Foreground --verbose=1/)
-
-      should_not contain_file('/etc/default/haveged')
-    }
   end
 
   context 'using init startup with parameter buffer_size' do
