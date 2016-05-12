@@ -39,21 +39,21 @@ Package, service and configuration files for the haveged daemon.
 
 ### Setup Requirements
 
-The haveged module requires the Puppetlabs modules `stdlib`.
+This module requires the `stdlib` module.
 
-The `haveged` package is part of the EPEL yum repository, so this must be enabled on Enterprise Linux.
+The `haveged` package is part of the EPEL yum repository, so this repository must be enabled on Enterprise Linux to be able to install the package.
 
 ### Beginning with haveged
 
-Declare the haveged class to install and run the haveged daemon with the default parameters.
+Declare the haveged class to run the haveged daemon with the default parameters.
 
 ```puppet
 class { 'haveged': }
 ```
 
-This installs the haveged package and starts the service.
+This installs the haveged package and starts the service using default parameters.
 
-See the next sections for a detailed description of the available configuration options.
+See the following sections for a detailed description of the available configuration options.
 
 ## Usage
 
@@ -67,52 +67,87 @@ class { 'haveged':
 
 ## Reference
 
-### Classes
+- [**Public Classes**](#public-classes)
+  - [Class: haveged](#class-haveged)
+- [**Private Classes**](#private-classes)
+  - [Class: haveged::config](#class-havegedconfig)
+  - [Class: haveged::package](#class-havegedpackage)
+  - [Class: haveged::params](#class-havegedparams)
+  - [Class: haveged::service](#class-havegedservice)
+- [**Facts**](#facts)
+  - [Fact: haveged_startup_provider](#fact-haveged_startup_provider)
 
-#### Public Classes
-
-* `haveged`: The basic setup of the haveged daemon.
-
-#### Private Classes
-
-* `haveged::config`: Configures the haveged daemon by updating the run time parameters for the daemon.
-* `haveged::package`: Installs the package.
-* `haveged::params`: Manages the parameters
-* `haveged::service`: Manages the haveged daemon.
+### Public Classes
 
 #### Class: `haveged`
 
 Main class, includes all other classes.
 
-##### Parameters (all optional)
+**Parameters for the `haveged` class:**
 
-* `buffer_size`: Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. Default: '128'
+##### `buffer_size`
 
-* `data_cache_size`: Set the data cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is '16' or as determined by the CPUID.
+Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. Default: `128`
 
-* `instruction_cache_size`: Set the instruction cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is '16'* or as determined by the CPUID.
+##### `data_cache_size`
 
-* `write_wakeup_threshold`: Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy below this amount of bits. The value must be string with a numeric value. Default: '1024'
+Set the data cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is `16`
 
-* `service_name`: The name of the service to manage. Normally provided by the `haveged::params` class.
+##### `instruction_cache_size`
 
-* `service_enable`: Whether the haveged service should be enabled to start at boot. Valued options: 'true', 'false'. Default: 'true'
+Set the instruction cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is `16` or as determined by the CPUID.
 
-* `service_ensure`: Whether the haveged service should be running. Valid options: 'stopped', 'false', 'running', 'true'. Default: 'running'
+##### `write_wakeup_threshold`
 
-* `package_name`: The name of the package to manage. Normally provided by the `haveged::params` class.
+Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy above this amount of bits. The value must be a string with a numeric value. Default: `1024`
 
-* `package_ensure`: The state of the haveged package. Valid options: 'present', 'installed', 'absent', 'purged', 'held', 'latest' or a specific package version number. Default: 'present'
+##### `service_name`
+
+The name of the service to manage. Normally provided by the `haveged::params` class.
+
+##### `service_enable`
+
+Whether the haveged service should be enabled to start at boot. Valid options: `true`, `false`. Default: `true`
+
+##### `service_ensure`
+
+Whether the haveged service should be running. Valid options: `stopped`, `false`, `running`, `true`. Default: `running`
+
+##### `package_name`
+
+The name of the package to manage. Normally provided by the `haveged::params` class.
+
+##### `package_ensure`
+
+The state of the haveged package. Valid options: `present`, `installed`, `absent`, `purged`, `held`, `latest` or a specific package version number. Default: `present`
+
+### Private Classes
+
+##### Class: `haveged::config`
+
+Configures the haveged daemon by updating the run time parameters for the daemon.
+
+##### Class: `haveged::package`
+
+Installs the package.
+
+##### Class: `haveged::params`
+
+Manages operating system specific parameters.
+
+##### Class: `haveged::service`
+
+Manages the haveged daemon.
 
 ### Facts
 
-This module provides the following facts:
+This module provides the following facts.
 
-* `haveged_startup_provider`: The startup system used on the node. The value of the fact can either be `systemd` or `init`.
+##### Fact: `haveged_startup_provider`
+
+The startup system used on the node. The implementation uses the process name of PID 1 to resolve the fact. The value is either `systemd` or `init`.
 
 ## Limitations
-
-Unfortunately the configuration is hardcoded on RHEL 6 systems. Using class parameters to set specific options will have no effect.
 
 The `haveged` module has been tested on
 
@@ -121,9 +156,12 @@ The `haveged` module has been tested on
 * Debian 8 (Jessie)
 * Ubuntu 12.04 (Precise Pangolin)
 * Ubuntu 14.04 (Trusty Tahr)
-* Ubuntu 15.04 (Vivid Vervet)
+* Ubuntu 15.10 (Wily Werewolf)
+* Ubuntu 16.04 (Xenial Xerus)
 * CentOS 6
 * CentOS 7
+
+> Unfortunately the configuration is hardcoded on RHEL 6 systems. Using class parameters to set specific options will have no effect.
 
 ## Development
 
