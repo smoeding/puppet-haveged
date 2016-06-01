@@ -16,9 +16,7 @@ describe 'haveged::package' do
     end
 
     it {
-      should contain_package('haveged') \
-              .with_ensure('foo') \
-              .with_name('foobar')
+      should contain_package(params[:package_name]).with_ensure('foo')
     }
   end
 end

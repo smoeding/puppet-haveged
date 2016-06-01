@@ -27,23 +27,23 @@
 #
 #
 class haveged::config (
-  $buffer_size            = undef,
-  $data_cache_size        = undef,
-  $instruction_cache_size = undef,
-  $write_wakeup_threshold = undef,
-) inherits haveged::params {
+  $buffer_size            =  defined('$::haveged::buffer_size') ? { true => getvar('::haveged::buffer_size'), default => undef },
+  $data_cache_size        =  defined('$::haveged::data_cache_size') ? { true => getvar('::haveged::data_cache_size'), default => undef },
+  $instruction_cache_size =  defined('$::haveged::instruction_cache_size') ? { true => getvar('::haveged::instruction_cache_size'), default => undef },
+  $write_wakeup_threshold =  defined('$::haveged::write_wakeup_threshold') ? { true => getvar('::haveged::write_wakeup_threshold'), default => undef }
+) inherits ::haveged::params {
 
   # Validate numeric parameters
-  if ($buffer_size != undef) {
+  if $buffer_size {
     validate_re($buffer_size, '^[0-9]+$')
   }
-  if ($data_cache_size != undef) {
+  if $data_cache_size {
     validate_re($data_cache_size, '^[0-9]+$')
   }
-  if ($instruction_cache_size != undef) {
+  if $instruction_cache_size {
     validate_re($instruction_cache_size, '^[0-9]+$')
   }
-  if ($write_wakeup_threshold != undef) {
+  if $write_wakeup_threshold {
     validate_re($write_wakeup_threshold, '^[0-9]+$')
   }
 
@@ -64,33 +64,35 @@ class haveged::config (
   $opts = join($opts_strings, ' ')
 
   # Update shell configuration file if applicable
-  if ($::haveged::params::daemon_opts_file != undef) {
+  $_daemon_opts_file = getvar('::haveged::params::daemon_opts_file')
+  if $_daemon_opts_file {
 
-    file { $::haveged::params::daemon_opts_file:
+    file { $_daemon_opts_file:
       ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('haveged/default.erb'),
+      content => template("${module_name}/default.erb"),
     }
   }
 
   # Update systemd configuration file if applicable
-  if ($::haveged::params::systemd_opts_dir != undef) {
+  $_systemd_opts_dir = getvar('::haveged::params::systemd_opts_dir')
+  if ($_systemd_opts_dir != undef) {
 
-    file { $::haveged::params::systemd_opts_dir:
+    file { $_systemd_opts_dir:
       ensure => directory,
       owner  => 'root',
       group  => 'root',
-      mode   => '0755',
+      mode   => '0644',
     }
 
-    file { "${::haveged::params::systemd_opts_dir}/opts.conf":
+    file { "${_systemd_opts_dir}/opts.conf":
       ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('haveged/systemd.erb'),
+      content => template("${module_name}/systemd.erb"),
     }
   }
 }

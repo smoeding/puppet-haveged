@@ -23,14 +23,13 @@
 #
 #
 class haveged::service (
-  $service_name   = $haveged::params::service_name,
-  $service_ensure = running,
-  $service_enable = true,
-) inherits haveged::params {
+  $service_name   = defined('$::haveged::service_name') ? { true => getvar('::haveged::service_name'), default => $::haveged::params::service_name },
+  $service_ensure = defined('$::haveged::_service_ensure') ? { true => getvar('::haveged::_service_ensure'), default => 'running' },
+  $service_enable = defined('$::haveged::_service_enable') ? { true => getvar('::haveged::_service_enable'), default => true }
+) inherits ::haveged::params {
 
-  service { 'haveged':
+  service { $service_name:
     ensure => $service_ensure,
-    enable => $service_enable,
-    name   => $service_name,
+    enable => $service_enable
   }
 }

@@ -28,18 +28,36 @@ describe 'haveged::config' do
       when 'Debian-8'
         let(:facts) { facts.merge({ :haveged_startup_provider => 'systemd' }) }
 
-      when 'Scientific-6', 'CentOS-6', 'RedHat-6', 'OracleLinux-6'
+      when 'Scientific-6', 'CentOS-6', 'RedHat-6'
         let(:facts) { facts.merge({ :haveged_startup_provider => 'init' }) }
 
-      when 'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
+      when 'OracleLinux-6'
+        # This is not supported by the facts helper yet
+        let(:facts) {
+          facts.merge({
+            :haveged_startup_provider => 'init',
+            :osfamily => 'RedHat'
+          })
+        }
+
+      when 'Scientific-7', 'CentOS-7', 'RedHat-7'
         let(:facts) { facts.merge({ :haveged_startup_provider => 'systemd' }) }
+
+      when 'OracleLinux-7'
+        # This is not supported by the facts helper yet
+        let(:facts) {
+          facts.merge({
+            :haveged_startup_provider => 'systemd',
+            :osfamily => 'RedHat'
+          })
+        }
 
         it {
           should contain_file('/etc/systemd/system/haveged.service.d') \
                   .with_ensure('directory') \
                   .with_owner('root') \
                   .with_group('root') \
-                  .with_mode('0755')
+                  .with_mode('0644')
 
           should contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
                   .with_ensure('file') \
@@ -59,7 +77,7 @@ describe 'haveged::config' do
   end
 
   context 'using init startup with parameter buffer_size' do
-    let :facts do
+    let :facts  do
       { :haveged_startup_provider => 'init' }
     end
 

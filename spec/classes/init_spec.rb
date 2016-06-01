@@ -11,19 +11,14 @@ describe 'haveged' do
 
         should contain_class('haveged::params')
 
-        should contain_anchor('haveged::begin')
-        should contain_anchor('haveged::end')
-
-        should contain_class('haveged::package') \
-                .that_requires('Anchor[haveged::begin]')
+        should contain_class('haveged::package')
 
         should contain_class('haveged::config') \
                 .with_write_wakeup_threshold('1024') \
                 .that_requires('Class[haveged::package]') \
                 .that_notifies('Class[haveged::service]')
 
-        should contain_class('haveged::service') \
-                .that_comes_before('Anchor[haveged::end]')
+        should contain_class('haveged::service')
       }
     end
 
@@ -175,6 +170,6 @@ describe 'haveged' do
       { :osfamily => 'VMS', :operatingsystem => 'VAX/VMS' }
     end
 
-    it { is_expected.to raise_error Puppet::Error, /Unsupported osfamily VMS/ }
+    it { is_expected.to raise_error Puppet::Error, /Unsupported osfamily 'VMS'/ }
   end
 end

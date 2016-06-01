@@ -23,12 +23,18 @@
 #
 #
 class haveged::package (
-  $package_name   = $haveged::params::package_name,
-  $package_ensure = 'present',
-) inherits haveged::params {
+  $package_name   = defined('$::haveged::package_name') ? { true => getvar('::haveged::package_name'), default => $::haveged::params::package_name },
+  $package_ensure = defined('$::haveged::_package_ensure') ? { true => getvar('::haveged::_package_ensure'), false => 'present' },
+) inherits ::haveged::params {
 
-  package { 'haveged':
-    ensure => $package_ensure,
-    name   => $package_name,
+  # Working around a bug in the package type
+  # https://tickets.puppetlabs.com/browse/PUP-1295
+  if ($::osfamily == 'RedHat') and ($package_ensure == 'purged') {
+    $_package_ensure = 'absent'
   }
+  else {
+    $_package_ensure = $package_ensure
+  }
+
+  package { $package_name: ensure => $_package_ensure }
 }
