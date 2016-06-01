@@ -21,10 +21,9 @@ describe 'haveged::service' do
     end
 
     it {
-      should contain_service('haveged') \
+      should contain_service(params[:service_name]) \
               .with_ensure('bar') \
-              .with_enable('foo') \
-              .with_name('foobar')
+              .with_enable('foo')
     }
   end
 end

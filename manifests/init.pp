@@ -48,12 +48,12 @@ class haveged (
   $data_cache_size        = undef,
   $instruction_cache_size = undef,
   $write_wakeup_threshold = '1024',
-  $service_name           = $haveged::params::service_name,
+  $service_name           = $::haveged::params::service_name,
   $service_enable         = true,
   $service_ensure         = 'running',
-  $package_name           = $haveged::params::package_name,
+  $package_name           = $::haveged::params::package_name,
   $package_ensure         = 'present',
-) inherits haveged::params {
+) inherits ::haveged::params {
 
   #
   # Canonicalize parameter package_ensure
@@ -70,6 +70,7 @@ class haveged (
   #
   if ($_package_ensure == 'purged') {
     $_service_ensure = 'stopped'
+    $_service_enable = false
   }
   else {
     $_service_ensure = $service_ensure ? {
@@ -77,37 +78,22 @@ class haveged (
       false   => 'stopped',
       default => $service_ensure,
     }
+
+    $_service_enable = $service_enable
   }
 
-  anchor { 'haveged::begin': }
+  contain '::haveged::package'
+  contain '::haveged::service'
 
-  class { 'haveged::package':
-    package_name   => $package_name,
-    package_ensure => $_package_ensure,
-    require        => Anchor['haveged::begin'],
-  }
-
-  if ($_service_ensure == 'running') {
-    class { 'haveged::config':
-      buffer_size            => $buffer_size,
-      data_cache_size        => $data_cache_size,
-      instruction_cache_size => $instruction_cache_size,
-      write_wakeup_threshold => $write_wakeup_threshold,
-      require                => Class['haveged::package'],
-      notify                 => Class['haveged::service'],
-    }
-  }
-  else {
+  if ($_package_ensure == 'purged') {
     # Allow stopping before removal
     Class['haveged::service'] -> Class['haveged::package']
   }
+  else {
+    contain '::haveged::config'
 
-  class { 'haveged::service':
-    service_name   => $service_name,
-    service_ensure => $_service_ensure,
-    service_enable => $service_enable,
-    before         => Anchor['haveged::end'],
+    Class['haveged::package'] ~> Class['haveged::service']
+    Class['haveged::package'] -> Class['haveged::config']
+    Class['haveged::config'] ~> Class['haveged::service']
   }
-
-  anchor { 'haveged::end': }
 }

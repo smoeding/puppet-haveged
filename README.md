@@ -48,7 +48,7 @@ The `haveged` package is part of the EPEL yum repository, so this repository mus
 Declare the haveged class to run the haveged daemon with the default parameters.
 
 ```puppet
-class { 'haveged': }
+include '::haveged'
 ```
 
 This installs the haveged package and starts the service using default parameters.
