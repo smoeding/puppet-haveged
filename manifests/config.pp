@@ -58,7 +58,7 @@ class haveged::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('haveged/default.erb'),
+      content => epp('haveged/default.epp', { 'opts' => $opts }),
     }
   }
 
@@ -76,7 +76,7 @@ class haveged::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('haveged/systemd.erb'),
+      content => epp('haveged/systemd.epp', { 'opts' => $opts }),
     }
   }
 }
