@@ -7,48 +7,75 @@
   "source": "https://github.com/smoeding/puppet-haveged",
   "project_page": "https://github.com/smoeding/puppet-haveged",
   "issues_url": "https://github.com/smoeding/puppet-haveged/issues",
-  "tags": [ "entropy", "random" ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.2.0 < 5.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [ "12.04", "14.04", "15.04" ]
+      "operatingsystemrelease": [
+        "14.04",
+        "16.04",
+        "18.04"
+      ]
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     },
     {
       "operatingsystem": "Scientific",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     },
     {
       "operatingsystem": "OEL",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     },
     {
       "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [ "6", "7" ]
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
     }
-  ],
-  "dependencies": [
-    { "name": "puppetlabs/stdlib", "version_requirement": "4.x" }
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "3.2.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": "3.x"
-    }
-  ]
+      "version_requirement": ">= 4.0.0 < 6.0.0"
+     }
+  ],
+  "tags": [
+    "entropy",
+    "random"
+  ],
+  "pdk-version": "1.6.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates",
+  "template-ref": "heads/master-0-g6b0d497"
 }
