@@ -19,14 +19,14 @@ describe 'haveged::config' do
       when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
            'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
         let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
-      else
-        # fail if actual os is not tested here
-        it { expect(osver).to eq('osver') }
       end
     end
 
     context "on #{os}" do
       context 'with default parameters' do
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
+
         case osver
         when 'Ubuntu-14.04'
           it {
@@ -67,6 +67,10 @@ describe 'haveged::config' do
 
             is_expected.not_to contain_file('/etc/default/haveged')
           }
+
+        else
+          # fail if actual os is not tested here
+          it { expect(osver).to eq('osver') }
         end
       end
 
@@ -74,6 +78,9 @@ describe 'haveged::config' do
         let(:params) do
           { buffer_size: '1103' }
         end
+
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
 
         case osver
         when 'Ubuntu-14.04'
@@ -96,6 +103,9 @@ describe 'haveged::config' do
           { data_cache_size: '1103' }
         end
 
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
+
         case osver
         when 'Ubuntu-14.04'
           it {
@@ -117,6 +127,12 @@ describe 'haveged::config' do
           { instruction_cache_size: '1103' }
         end
 
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
+
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
+
         case osver
         when 'Ubuntu-14.04'
           it {
@@ -137,6 +153,9 @@ describe 'haveged::config' do
         let(:params) do
           { write_wakeup_threshold: '1103' }
         end
+
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
 
         case osver
         when 'Ubuntu-14.04'
