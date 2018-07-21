@@ -64,8 +64,8 @@ class haveged (
   }
 
   package { 'haveged':
-    name   => $package_name,
     ensure => $package_ensure,
+    name   => $package_name,
   }
 
   if ($_service_ensure == 'running') {
@@ -84,8 +84,8 @@ class haveged (
   }
 
   Service { 'haveged':
-    name   => $service_name,
     ensure => $_service_ensure,
     enable => $service_enable,
+    name   => $service_name,
   }
 }
