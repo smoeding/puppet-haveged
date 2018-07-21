@@ -27,10 +27,12 @@
 #
 #
 class haveged::config (
-  Optional[Integer] $buffer_size            = undef,
-  Optional[Integer] $data_cache_size        = undef,
-  Optional[Integer] $instruction_cache_size = undef,
-  Optional[Integer] $write_wakeup_threshold = undef,
+  Optional[Integer]              $buffer_size            = undef,
+  Optional[Integer]              $data_cache_size        = undef,
+  Optional[Integer]              $instruction_cache_size = undef,
+  Optional[Integer]              $write_wakeup_threshold = undef,
+  Optional[Stdlib::Absolutepath] $daemon_opts_file       = $::haveged::params::daemon_opts_file,
+  Optional[Stdlib::Absolutepath] $systemd_opts_dir       = $::haveged::params::systemd_opts_dir,
 ) inherits haveged::params {
 
   $opts_hash = {
@@ -50,9 +52,8 @@ class haveged::config (
   $opts = join($opts_strings, ' ')
 
   # Update shell configuration file if applicable
-  if ($::haveged::params::daemon_opts_file != undef) {
-
-    file { $::haveged::params::daemon_opts_file:
+  if $daemon_opts_file {
+    file { $daemon_opts_file:
       ensure  => file,
       owner   => 'root',
       group   => 'root',
@@ -62,16 +63,15 @@ class haveged::config (
   }
 
   # Update systemd configuration file if applicable
-  if ($::haveged::params::systemd_opts_dir != undef) {
-
-    file { $::haveged::params::systemd_opts_dir:
+  if $systemd_opts_dir {
+    file { $systemd_opts_dir:
       ensure => directory,
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
     }
 
-    file { "${::haveged::params::systemd_opts_dir}/opts.conf":
+    file { "${systemd_opts_dir}/opts.conf":
       ensure  => file,
       owner   => 'root',
       group   => 'root',
