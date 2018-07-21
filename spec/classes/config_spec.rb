@@ -2,27 +2,27 @@ require 'spec_helper'
 
 describe 'haveged::config' do
   on_supported_os.each do |os, facts|
-    before(:each) do
-      Facter.clear
-      facts.each do |k, v|
-        Facter.stubs(:fact).with(k).returns Facter.add(k) { setcode { v } }
-      end
-
-      osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
-      osver = "#{facts[:operatingsystem]}-#{osrel}"
-
-      case osver
-      when 'Ubuntu-14.04'
-        let(:facts) { facts.merge(haveged_startup_provider: 'init') }
-      when 'Scientific-6', 'CentOS-6', 'RedHat-6', 'OracleLinux-6'
-        let(:facts) { facts.merge(haveged_startup_provider: 'init') }
-      when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
-           'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
-        let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
-      end
-    end
-
     context "on #{os}" do
+      before(:each) do
+        Facter.clear
+        facts.each do |k, v|
+          Facter.stubs(:fact).with(k).returns Facter.add(k) { setcode { v } }
+        end
+
+        osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+        osver = "#{facts[:operatingsystem]}-#{osrel}"
+
+        case osver
+        when 'Ubuntu-14.04'
+          let(:facts) { facts.merge(haveged_startup_provider: 'init') }
+        when 'Scientific-6', 'CentOS-6', 'RedHat-6', 'OracleLinux-6'
+          let(:facts) { facts.merge(haveged_startup_provider: 'init') }
+        when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+             'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
+          let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
+        end
+      end
+
       context 'with default parameters' do
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
         osver = "#{facts[:operatingsystem]}-#{osrel}"

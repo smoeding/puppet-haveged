@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'haveged' do
   on_supported_os.each do |os, facts|
-    before(:each) do
-      Facter.clear
-      facts.each do |k, v|
-        Facter.stubs(:fact).with(k).returns Facter.add(k) { setcode { v } }
-      end
-    end
-
     context "on #{os}" do
+      before(:each) do
+        Facter.clear
+        facts.each do |k, v|
+          Facter.stubs(:fact).with(k).returns Facter.add(k) { setcode { v } }
+        end
+      end
+
       context 'with default parameters' do
         it {
           is_expected.to contain_class('haveged')
