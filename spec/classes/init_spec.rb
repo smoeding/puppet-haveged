@@ -3,9 +3,7 @@ require 'spec_helper'
 describe 'haveged' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        facts
-      end
+      let(:facts) { facts }
 
       osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
       osver = "#{facts[:operatingsystem]}-#{osrel}"
@@ -42,21 +40,53 @@ describe 'haveged' do
         }
       end
 
-      context 'with service_ensure => stopped' do
+      context 'with package_ensure => present' do
         let :params do
-          { service_ensure: 'stopped' }
+          { package_ensure: 'present' }
+        end
+
+        it { is_expected.to contain_package('haveged').with_ensure('present') }
+      end
+
+      context 'with package_ensure => installed' do
+        let :params do
+          { package_ensure: 'installed' }
+        end
+
+        it { is_expected.to contain_package('haveged').with_ensure('installed') }
+      end
+
+      context 'with package_ensure => latest' do
+        let :params do
+          { package_ensure: 'latest' }
+        end
+
+        it { is_expected.to contain_package('haveged').with_ensure('latest') }
+      end
+
+      context 'with package_ensure => absent' do
+        let :params do
+          { package_ensure: 'absent' }
         end
 
         it {
-          is_expected.to contain_class('haveged')
+          is_expected.to contain_package('haveged').with_ensure('absent')
 
-          is_expected.to contain_package('haveged')
+          is_expected.not_to contain_Class('haveged::config')
+          is_expected.not_to contain_service('haveged')
+        }
+      end
 
-          is_expected.not_to contain_class('haveged::config')
+      context 'with package_ensure => purged' do
+        let :params do
+          { package_ensure: 'purged' }
+        end
 
-          is_expected.to contain_service('haveged') \
-            .with_ensure('stopped') \
-            .that_comes_before('Package[haveged]')
+        it {
+          is_expected.to contain_package('haveged').with_ensure('purged')
+
+          is_expected.not_to contain_Class('haveged::config')
+          is_expected.not_to contain_service('haveged')
         }
       end
 
@@ -68,20 +98,20 @@ describe 'haveged' do
         it { is_expected.to contain_service('haveged').with_name('foobar') }
       end
 
-      context 'with service_ensure => running' do
-        let :params do
-          { service_ensure: 'running' }
-        end
-
-        it { is_expected.to contain_service('haveged').with_ensure('running') }
-      end
-
       context 'with service_ensure => stopped' do
         let :params do
           { service_ensure: 'stopped' }
         end
 
         it { is_expected.to contain_service('haveged').with_ensure('stopped') }
+      end
+
+      context 'with service_ensure => running' do
+        let :params do
+          { service_ensure: 'running' }
+        end
+
+        it { is_expected.to contain_service('haveged').with_ensure('running') }
       end
 
       context 'with config parameters defined' do
@@ -100,44 +130,6 @@ describe 'haveged' do
             .with_data_cache_size(3) \
             .with_instruction_cache_size(5) \
             .with_write_wakeup_threshold(7)
-        }
-      end
-
-      context 'with package_ensure => present' do
-        let :params do
-          { package_ensure: 'present' }
-        end
-
-        it { is_expected.to contain_package('haveged').with_ensure('present') }
-      end
-
-      context 'with package_ensure => absent' do
-        let :params do
-          { package_ensure: 'absent' }
-        end
-
-        it {
-          is_expected.to contain_package('haveged') \
-            .with_ensure('absent')
-
-          is_expected.to contain_service('haveged') \
-            .with_ensure('stopped') \
-            .that_comes_before('Package[haveged]')
-        }
-      end
-
-      context 'with package_ensure => purged' do
-        let :params do
-          { package_ensure: 'purged' }
-        end
-
-        it {
-          is_expected.to contain_package('haveged') \
-            .with_ensure('purged')
-
-          is_expected.to contain_service('haveged') \
-            .with_ensure('stopped') \
-            .that_comes_before('Package[haveged]')
         }
       end
     end
