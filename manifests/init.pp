@@ -44,44 +44,28 @@
 #
 #
 class haveged (
-  Optional[Integer] $buffer_size            = undef,
-  Optional[Integer] $data_cache_size        = undef,
-  Optional[Integer] $instruction_cache_size = undef,
-  Integer           $write_wakeup_threshold = 1024,
-  $service_name                             = $haveged::params::service_name,
-  $service_enable                           = true,
-  $service_ensure                           = 'running',
-  $package_name                             = $haveged::params::package_name,
-  $package_ensure                           = 'present',
+  Optional[Integer]                 $buffer_size            = undef,
+  Optional[Integer]                 $data_cache_size        = undef,
+  Optional[Integer]                 $instruction_cache_size = undef,
+  Integer                           $write_wakeup_threshold = 1024,
+  String                            $service_name           = $haveged::params::service_name,
+  Boolean                           $service_enable         = true,
+  Stdlib::Ensure::Service           $service_ensure         = 'running',
+  String                            $package_name           = $haveged::params::package_name,
+  Enum['present','absent','purged'] $package_ensure         = 'present',
 ) inherits haveged::params {
-
-  #
-  # Canonicalize parameter package_ensure
-  #
-  $_package_ensure = $package_ensure ? {
-    true     => 'present',
-    false    => 'purged',
-    'absent' => 'purged',
-    default  => $package_ensure,
-  }
 
   #
   # Canonicalize parameter service_ensure
   #
-  if ($_package_ensure == 'purged') {
-    $_service_ensure = 'stopped'
-  }
-  else {
-    $_service_ensure = $service_ensure ? {
-      true    => 'running',
-      false   => 'stopped',
-      default => $service_ensure,
-    }
+  $_service_ensure = $package_ensure ? {
+    /^(absent|purged)$/ => 'stopped',
+    default             => $service_ensure,
   }
 
-  class { 'haveged::package':
-    package_name   => $package_name,
-    package_ensure => $_package_ensure,
+  package { 'haveged':
+    name   => $package_name,
+    ensure => $package_ensure,
   }
 
   if ($_service_ensure == 'running') {
@@ -90,18 +74,18 @@ class haveged (
       data_cache_size        => $data_cache_size,
       instruction_cache_size => $instruction_cache_size,
       write_wakeup_threshold => $write_wakeup_threshold,
-      require                => Class['haveged::package'],
-      notify                 => Class['haveged::service'],
+      require                => Package['haveged'],
+      notify                 => Service['haveged'],
     }
   }
   else {
     # Allow stopping before removal
-    Class['haveged::service'] -> Class['haveged::package']
+    Service['haveged'] -> Package['haveged']
   }
 
-  class { 'haveged::service':
-    service_name   => $service_name,
-    service_ensure => $_service_ensure,
-    service_enable => $service_enable,
+  Service { 'haveged':
+    name   => $service_name,
+    ensure => $_service_ensure,
+    enable => $service_enable,
   }
 }

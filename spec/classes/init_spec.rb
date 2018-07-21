@@ -26,14 +26,19 @@ describe 'haveged' do
 
           is_expected.to contain_class('haveged::params')
 
-          is_expected.to contain_class('haveged::package')
+          is_expected.to contain_package('haveged') \
+            .with_ensure('present') \
+            .with_name('haveged')
 
           is_expected.to contain_class('haveged::config') \
             .with_write_wakeup_threshold('1024') \
-            .that_requires('Class[haveged::package]') \
-            .that_notifies('Class[haveged::service]')
+            .that_requires('Package[haveged]') \
+            .that_notifies('Service[haveged]')
 
-          is_expected.to contain_class('haveged::service')
+          is_expected.to contain_service('haveged') \
+            .with_ensure('running') \
+            .with_enable(true) \
+            .with_name('haveged')
         }
       end
 
@@ -45,45 +50,38 @@ describe 'haveged' do
         it {
           is_expected.to contain_class('haveged')
 
-          is_expected.to contain_class('haveged::package')
+          is_expected.to contain_package('haveged')
 
           is_expected.not_to contain_class('haveged::config')
 
-          is_expected.to contain_class('haveged::service') \
-            .that_comes_before('Class[haveged::package]')
+          is_expected.to contain_service('haveged') \
+            .with_ensure('stopped') \
+            .that_comes_before('Package[haveged]')
         }
       end
 
-      context 'with package parameters defined' do
+      context 'with service_name defined' do
         let :params do
-          {
-            package_name:   'foobar',
-            package_ensure: 'foo',
-          }
+          { service_name: 'foobar' }
         end
 
-        it {
-          is_expected.to contain_class('haveged::package') \
-            .with_package_name('foobar') \
-            .with_package_ensure('foo')
-        }
+        it { is_expected.to contain_service('haveged').with_name('foobar') }
       end
 
-      context 'with service parameters defined' do
+      context 'with service_ensure => running' do
         let :params do
-          {
-            service_name:   'foobar',
-            service_enable: 'foo',
-            service_ensure: 'bar',
-          }
+          { service_ensure: 'running' }
         end
 
-        it {
-          is_expected.to contain_class('haveged::service') \
-            .with_service_name('foobar') \
-            .with_service_enable('foo') \
-            .with_service_ensure('bar')
-        }
+        it { is_expected.to contain_service('haveged').with_ensure('running') }
+      end
+
+      context 'with service_ensure => stopped' do
+        let :params do
+          { service_ensure: 'stopped' }
+        end
+
+        it { is_expected.to contain_service('haveged').with_ensure('stopped') }
       end
 
       context 'with config parameters defined' do
@@ -93,7 +91,6 @@ describe 'haveged' do
             data_cache_size:        3,
             instruction_cache_size: 5,
             write_wakeup_threshold: 7,
-
           }
         end
 
@@ -106,39 +103,12 @@ describe 'haveged' do
         }
       end
 
-      context 'with package_ensure => true' do
+      context 'with package_ensure => present' do
         let :params do
-          { package_ensure: true }
+          { package_ensure: 'present' }
         end
 
-        it {
-          is_expected.to contain_class('haveged::package') \
-            .with_package_ensure('present')
-
-          is_expected.to contain_class('haveged::config') \
-            .that_requires('Class[haveged::package]') \
-            .that_notifies('Class[haveged::service]')
-
-          is_expected.to contain_class('haveged::config')
-
-          is_expected.to contain_class('haveged::service') \
-            .with_service_ensure('running')
-        }
-      end
-
-      context 'with package_ensure => false' do
-        let :params do
-          { package_ensure: false }
-        end
-
-        it {
-          is_expected.to contain_class('haveged::package') \
-            .with_package_ensure('purged')
-
-          is_expected.to contain_class('haveged::service') \
-            .with_service_ensure('stopped') \
-            .that_comes_before('Class[haveged::package]')
-        }
+        it { is_expected.to contain_package('haveged').with_ensure('present') }
       end
 
       context 'with package_ensure => absent' do
@@ -147,12 +117,12 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_class('haveged::package') \
-            .with_package_ensure('purged')
+          is_expected.to contain_package('haveged') \
+            .with_ensure('absent')
 
-          is_expected.to contain_class('haveged::service') \
-            .with_service_ensure('stopped') \
-            .that_comes_before('Class[haveged::package]')
+          is_expected.to contain_service('haveged') \
+            .with_ensure('stopped') \
+            .that_comes_before('Package[haveged]')
         }
       end
 
@@ -162,12 +132,12 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_class('haveged::package') \
-            .with_package_ensure('purged')
+          is_expected.to contain_package('haveged') \
+            .with_ensure('purged')
 
-          is_expected.to contain_class('haveged::service') \
-            .with_service_ensure('stopped') \
-            .that_comes_before('Class[haveged::package]')
+          is_expected.to contain_service('haveged') \
+            .with_ensure('stopped') \
+            .that_comes_before('Package[haveged]')
         }
       end
     end
