@@ -7,11 +7,8 @@ defaults:
   data_hash: yaml_data
 
 hierarchy:
-  - name: "OS major release"
-    path: "os/%{facts.os.name}-%{facts.os.release.major}.yaml"
-
-  - name: "OS name"
-    path: "os/%{facts.os.name}.yaml"
+  - name: "OS & startup provider specific settings"
+    path: "%{facts.os.family}-%{haveged_startup_provider}.yaml"
 
   - name: "common"
     path: "common.yaml"

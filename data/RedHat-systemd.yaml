@@ -1,0 +1,4 @@
+# RedHat based OS with systemd startup
+---
+
+haveged::config::systemd_dir: '/etc/systemd/system'

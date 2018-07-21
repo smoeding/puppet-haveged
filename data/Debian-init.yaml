@@ -1,0 +1,4 @@
+# Debian based OS with init startup
+---
+
+haveged::config::daemon_opts: '/etc/default/haveged'

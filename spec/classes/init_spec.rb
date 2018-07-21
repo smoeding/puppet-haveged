@@ -22,8 +22,6 @@ describe 'haveged' do
         it {
           is_expected.to contain_class('haveged')
 
-          is_expected.to contain_class('haveged::params')
-
           is_expected.to contain_package('haveged') \
             .with_ensure('present') \
             .with_name('haveged')
@@ -133,18 +131,5 @@ describe 'haveged' do
         }
       end
     end
-  end
-
-  context 'on an unsupported operating system' do
-    let :facts do
-      {
-        osfamily:        'VMS',
-        operatingsystem: 'VAX/VMS',
-      }
-    end
-
-    it {
-      is_expected.to raise_error Puppet::Error, %r{Unsupported osfamily VMS}
-    }
   end
 end

@@ -53,7 +53,7 @@ class haveged (
   Optional[Integer]                                      $buffer_size            = undef,
   Optional[Integer]                                      $data_cache_size        = undef,
   Optional[Integer]                                      $instruction_cache_size = undef,
-) inherits haveged::params {
+) {
 
   package { 'haveged':
     ensure => $package_ensure,
@@ -62,6 +62,7 @@ class haveged (
 
   if ($package_ensure in ['present', 'installed', 'latest', ]) {
     class { 'haveged::config':
+      service_name           => $service_name,
       buffer_size            => $buffer_size,
       data_cache_size        => $data_cache_size,
       instruction_cache_size => $instruction_cache_size,
