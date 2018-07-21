@@ -1,26 +1,25 @@
 require 'spec_helper'
 
 describe 'Facter::Util::Fact' do
-  before(:each) do
-    Facter.clear
-    Facter.fact(:kernel).stubs(:value).returns('Linux')
-  end
-
-  after(:each) do
-    Facter.clear
-  end
-
   context 'haveged_startup_provider with /proc/1/comm' do
+    let(:facts) do
+      { kernel: 'Linux' }
+    end
+
     it {
-      File.stubs(:open).returns("foo\n")
-      expect(Facter.fact(:haveged_startup_provider).value).to eq('foo')
+      allow(File).to receive(:open).and_returns("foo\n")
+      expect(Facter).to receive(:fact).with(:haveged_startup_provider).and_returns('foo')
     }
   end
 
   context 'haveged_startup_provider without /proc/1/comm' do
+    let(:facts) do
+      { kernel: 'Linux' }
+    end
+
     it {
-      File.stubs(:open) { raise(StandardException) }
-      expect(Facter.fact(:haveged_startup_provider).value).to eq('init')
+      allow(File).to receive(:open) { raise(StandardException) }
+      expect(Facter).to receive(:fact).with(:haveged_startup_provider).and_returns('init')
     }
   end
 end
