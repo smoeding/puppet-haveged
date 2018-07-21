@@ -66,8 +66,6 @@ class haveged (
       data_cache_size        => $data_cache_size,
       instruction_cache_size => $instruction_cache_size,
       write_wakeup_threshold => $write_wakeup_threshold,
-      daemon_opts_file       => $::haveged::params::daemon_opts_file,
-      systemd_opts_dir       => $::haveged::params::systemd_opts_dir,
       require                => Package['haveged'],
       notify                 => Service['haveged'],
     }
