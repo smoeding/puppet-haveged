@@ -2,10 +2,17 @@ require 'spec_helper'
 
 describe 'haveged::config' do
   on_supported_os.each do |os, facts|
-    osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
-    osver = "#{facts[:operatingsystem]}-#{osrel}"
-
     context "on #{os} with default parameters" do
+      before(:each) do
+        Facter.clear
+        facts.each do |k, v|
+          Facter.stubs(:fact).with(k).returns Facter.add(k) { setcode { v } }
+        end
+      end
+
+      osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
+      osver = "#{facts[:operatingsystem]}-#{osrel}"
+
       case osver
       when 'Ubuntu-14.04'
         let(:facts) { facts.merge(haveged_startup_provider: 'init') }
@@ -22,13 +29,11 @@ describe 'haveged::config' do
           is_expected.not_to contain_file('/etc/systemd/system/haveged.service.d/opts.conf')
         }
 
-      when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04'
-        let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
-
       when 'Scientific-6', 'CentOS-6', 'RedHat-6', 'OracleLinux-6'
         let(:facts) { facts.merge(haveged_startup_provider: 'init') }
 
-      when 'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
+      when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+           'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
         let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
 
         it {
@@ -53,125 +58,128 @@ describe 'haveged::config' do
         it { expect(osver).to eq('osver') }
       end
     end
-  end
 
-  context 'using init startup with parameter buffer_size' do
-    let :facts do
-      { haveged_startup_provider: 'init' }
+    context "on #{os} with parameter buffer_size" do
+      let(:params)
+        { buffer_size: '1103' }
+      end
+
+      case osver
+      when 'Ubuntu-14.04'
+        let(:facts) { facts.merge(haveged_startup_provider: 'init') }
+
+        it {
+          is_expected.to contain_file('/etc/default/haveged') \
+            .with_content(%r{^DAEMON_ARGS="-b 1103"})
+        }
+
+      when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+           'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
+        let(:facts) { facts.merge(haveged_startup_provider: 'systemd') }
+
+        it {
+          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+            .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -b 1103})
+        }
+      end
     end
 
-    let :params do
-      { buffer_size: '1103' }
+    context "on #{os} with parameter buffer_size" do
+
+      let(:params) do
+        { buffer_size: '1103' }
+      end
+
     end
 
-    it {
-      is_expected.to contain_file('/etc/default/haveged') \
-        .with_content(%r{^DAEMON_ARGS="-b 1103"})
-    }
-  end
+    context "on #{os} with parameter data_cache_size" do
+      let(:facts) do
+        { haveged_startup_provider: 'init' }
+      end
 
-  context 'using systemd startup with parameter buffer_size' do
-    let :facts do
-      { haveged_startup_provider: 'systemd' }
+      let(:params) do
+        { data_cache_size: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/default/haveged') \
+          .with_content(%r{^DAEMON_ARGS="-d 1103"})
+      }
     end
 
-    let :params do
-      { buffer_size: '1103' }
+    context "on #{os} with parameter data_cache_size" do
+      let(:facts) do
+        { haveged_startup_provider: 'systemd' }
+      end
+
+      let(:params) do
+        { data_cache_size: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -d 1103})
+      }
     end
 
-    it {
-      is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-        .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -b 1103})
-    }
-  end
+    context "on #{os} with parameter instruction_cache_size" do
+      let(:facts) do
+        { haveged_startup_provider: 'init' }
+      end
 
-  context 'using init startup with parameter data_cache_size' do
-    let :facts do
-      { haveged_startup_provider: 'init' }
+      let(:params) do
+        { instruction_cache_size: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/default/haveged') \
+          .with_content(%r{^DAEMON_ARGS="-i 1103"})
+      }
     end
 
-    let :params do
-      { data_cache_size: '1103' }
+    context "on #{os} with parameter instruction_cache_size" do
+      let(:facts) do
+        { haveged_startup_provider: 'systemd' }
+      end
+
+      let(:params) do
+        { instruction_cache_size: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -i 1103})
+      }
     end
 
-    it {
-      is_expected.to contain_file('/etc/default/haveged') \
-        .with_content(%r{^DAEMON_ARGS="-d 1103"})
-    }
-  end
+    context "on #{os} with parameter write_wakeup_threshold" do
+      let(:facts) do
+        { haveged_startup_provider: 'init' }
+      end
 
-  context 'using systemd startup with parameter data_cache_size' do
-    let :facts do
-      { haveged_startup_provider: 'systemd' }
+      let(:params) do
+        { write_wakeup_threshold: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/default/haveged') \
+          .with_content(%r{^DAEMON_ARGS="-w 1103"$})
+      }
     end
 
-    let :params do
-      { data_cache_size: '1103' }
+    context "on #{os} with parameter write_wakeup_threshold" do
+      let(:facts) do
+        { haveged_startup_provider: 'systemd' }
+      end
+
+      let(:params) do
+        { write_wakeup_threshold: '1103' }
+      end
+
+      it {
+        is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -w 1103$})
+      }
     end
-
-    it {
-      is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-        .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -d 1103})
-    }
-  end
-
-  context 'using init startup with parameter instruction_cache_size' do
-    let :facts do
-      { haveged_startup_provider: 'init' }
-    end
-
-    let :params do
-      { instruction_cache_size: '1103' }
-    end
-
-    it {
-      is_expected.to contain_file('/etc/default/haveged') \
-        .with_content(%r{^DAEMON_ARGS="-i 1103"})
-    }
-  end
-
-  context 'using systemd startup with parameter instruction_cache_size' do
-    let :facts do
-      { haveged_startup_provider: 'systemd' }
-    end
-
-    let :params do
-      { instruction_cache_size: '1103' }
-    end
-
-    it {
-      is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-        .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -i 1103})
-    }
-  end
-
-  context 'using init startup with parameter write_wakeup_threshold' do
-    let :facts do
-      { haveged_startup_provider: 'init' }
-    end
-
-    let :params do
-      { write_wakeup_threshold: '1103' }
-    end
-
-    it {
-      is_expected.to contain_file('/etc/default/haveged') \
-        .with_content(%r{^DAEMON_ARGS="-w 1103"$})
-    }
-  end
-
-  context 'using systemd startup with parameter write_wakeup_threshold' do
-    let :facts do
-      { haveged_startup_provider: 'systemd' }
-    end
-
-    let :params do
-      { write_wakeup_threshold: '1103' }
-    end
-
-    it {
-      is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-        .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -w 1103$})
-    }
   end
 end
