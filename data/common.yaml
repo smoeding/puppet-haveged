@@ -1,0 +1,10 @@
+---
+
+haveged::package_name: 'haveged'
+haveged::package_ensure: 'present'
+
+haveged::service_name: 'haveged'
+haveged::service_enable: true
+haveged::service_ensure: 'running'
+
+haveged::write_wakeup_threshold: 1024

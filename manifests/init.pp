@@ -44,15 +44,15 @@
 #
 #
 class haveged (
+  String                                                 $package_name,
+  Enum['present','installed','latest','absent','purged'] $package_ensure,
+  String                                                 $service_name,
+  Boolean                                                $service_enable,
+  Stdlib::Ensure::Service                                $service_ensure,
+  Integer                                                $write_wakeup_threshold,
   Optional[Integer]                                      $buffer_size            = undef,
   Optional[Integer]                                      $data_cache_size        = undef,
   Optional[Integer]                                      $instruction_cache_size = undef,
-  Integer                                                $write_wakeup_threshold = 1024,
-  String                                                 $service_name           = $haveged::params::service_name,
-  Boolean                                                $service_enable         = true,
-  Stdlib::Ensure::Service                                $service_ensure         = 'running',
-  String                                                 $package_name           = $haveged::params::package_name,
-  Enum['present','installed','latest','absent','purged'] $package_ensure         = 'present',
 ) inherits haveged::params {
 
   package { 'haveged':
