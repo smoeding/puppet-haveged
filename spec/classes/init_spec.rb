@@ -94,20 +94,20 @@ describe 'haveged' do
       context 'with config parameters defined' do
         let :params do
           {
-            buffer_size:            '2',
-            data_cache_size:        '3',
-            instruction_cache_size: '5',
-            write_wakeup_threshold: '7',
+            buffer_size:            2,
+            data_cache_size:        3,
+            instruction_cache_size: 5,
+            write_wakeup_threshold: 7,
 
           }
         end
 
         it {
           is_expected.to contain_class('haveged::config') \
-            .with_buffer_size('2') \
-            .with_data_cache_size('3') \
-            .with_instruction_cache_size('5') \
-            .with_write_wakeup_threshold('7')
+            .with_buffer_size(2) \
+            .with_data_cache_size(3) \
+            .with_instruction_cache_size(5) \
+            .with_write_wakeup_threshold(7)
         }
       end
 

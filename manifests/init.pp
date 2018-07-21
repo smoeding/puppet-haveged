@@ -44,15 +44,15 @@
 #
 #
 class haveged (
-  $buffer_size            = undef,
-  $data_cache_size        = undef,
-  $instruction_cache_size = undef,
-  $write_wakeup_threshold = '1024',
-  $service_name           = $haveged::params::service_name,
-  $service_enable         = true,
-  $service_ensure         = 'running',
-  $package_name           = $haveged::params::package_name,
-  $package_ensure         = 'present',
+  Optional[Integer] $buffer_size            = undef,
+  Optional[Integer] $data_cache_size        = undef,
+  Optional[Integer] $instruction_cache_size = undef,
+  Integer           $write_wakeup_threshold = 1024,
+  $service_name                             = $haveged::params::service_name,
+  $service_enable                           = true,
+  $service_ensure                           = 'running',
+  $package_name                             = $haveged::params::package_name,
+  $package_ensure                           = 'present',
 ) inherits haveged::params {
 
   #

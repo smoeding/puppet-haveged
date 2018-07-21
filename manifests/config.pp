@@ -27,25 +27,11 @@
 #
 #
 class haveged::config (
-  $buffer_size            = undef,
-  $data_cache_size        = undef,
-  $instruction_cache_size = undef,
-  $write_wakeup_threshold = undef,
+  Optional[Integer] $buffer_size            = undef,
+  Optional[Integer] $data_cache_size        = undef,
+  Optional[Integer] $instruction_cache_size = undef,
+  Optional[Integer] $write_wakeup_threshold = undef,
 ) inherits haveged::params {
-
-  # Validate numeric parameters
-  if ($buffer_size != undef) {
-    validate_re($buffer_size, '^[0-9]+$')
-  }
-  if ($data_cache_size != undef) {
-    validate_re($data_cache_size, '^[0-9]+$')
-  }
-  if ($instruction_cache_size != undef) {
-    validate_re($instruction_cache_size, '^[0-9]+$')
-  }
-  if ($write_wakeup_threshold != undef) {
-    validate_re($write_wakeup_threshold, '^[0-9]+$')
-  }
 
   $opts_hash = {
     '-b' => $buffer_size,

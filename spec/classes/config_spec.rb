@@ -73,7 +73,7 @@ describe 'haveged::config' do
 
       context 'with parameter buffer_size' do
         let(:params) do
-          { buffer_size: '1103' }
+          { buffer_size: 1103 }
         end
 
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
@@ -97,7 +97,7 @@ describe 'haveged::config' do
 
       context 'with parameter data_cache_size' do
         let(:params) do
-          { data_cache_size: '1103' }
+          { data_cache_size: 1103 }
         end
 
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
@@ -121,7 +121,7 @@ describe 'haveged::config' do
 
       context 'with parameter instruction_cache_size' do
         let(:params) do
-          { instruction_cache_size: '1103' }
+          { instruction_cache_size: 1103 }
         end
 
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
@@ -145,7 +145,7 @@ describe 'haveged::config' do
 
       context 'with parameter write_wakeup_threshold' do
         let(:params) do
-          { write_wakeup_threshold: '1103' }
+          { write_wakeup_threshold: 1103 }
         end
 
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
