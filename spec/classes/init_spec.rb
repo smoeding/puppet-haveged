@@ -26,19 +26,14 @@ describe 'haveged' do
 
           is_expected.to contain_class('haveged::params')
 
-          is_expected.to contain_anchor('haveged::begin')
-          is_expected.to contain_anchor('haveged::end')
-
-          is_expected.to contain_class('haveged::package') \
-            .that_requires('Anchor[haveged::begin]')
+          is_expected.to contain_class('haveged::package')
 
           is_expected.to contain_class('haveged::config') \
             .with_write_wakeup_threshold('1024') \
             .that_requires('Class[haveged::package]') \
             .that_notifies('Class[haveged::service]')
 
-          is_expected.to contain_class('haveged::service') \
-            .that_comes_before('Anchor[haveged::end]')
+          is_expected.to contain_class('haveged::service')
         }
       end
 

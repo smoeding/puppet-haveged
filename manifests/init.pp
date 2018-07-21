@@ -79,12 +79,9 @@ class haveged (
     }
   }
 
-  anchor { 'haveged::begin': }
-
   class { 'haveged::package':
     package_name   => $package_name,
     package_ensure => $_package_ensure,
-    require        => Anchor['haveged::begin'],
   }
 
   if ($_service_ensure == 'running') {
@@ -106,8 +103,5 @@ class haveged (
     service_name   => $service_name,
     service_ensure => $_service_ensure,
     service_enable => $service_enable,
-    before         => Anchor['haveged::end'],
   }
-
-  anchor { 'haveged::end': }
 }
