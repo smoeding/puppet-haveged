@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe 'Facter::Util::Fact' do
-  each(:before) do
+  before(:each) do
     Facter.clear
     Facter.fact(:kernel).stubs(:value).returns('Linux')
   end
 
-  each(:after) do
+  after(:each) do
     Facter.clear
   end
 
