@@ -44,17 +44,17 @@
 #
 #
 class haveged (
-  String                                                 $package_name,
-  Enum['present','installed','latest','absent','purged'] $package_ensure,
-  String                                                 $service_name,
-  Boolean                                                $service_enable,
-  Stdlib::Ensure::Service                                $service_ensure,
-  Integer                                                $write_wakeup_threshold,
-  Optional[Integer]                                      $buffer_size            = undef,
-  Optional[Integer]                                      $data_cache_size        = undef,
-  Optional[Integer]                                      $instruction_cache_size = undef,
-  Optional[Stdlib::Absolutepath]                         $daemon_opts            = undef,
-  Optional[Stdlib::Absolutepath]                         $systemd_dir            = undef,
+  String                         $package_name,
+  String                         $package_ensure,
+  String                         $service_name,
+  Boolean                        $service_enable,
+  Stdlib::Ensure::Service        $service_ensure,
+  Integer                        $write_wakeup_threshold,
+  Optional[Integer]              $buffer_size            = undef,
+  Optional[Integer]              $data_cache_size        = undef,
+  Optional[Integer]              $instruction_cache_size = undef,
+  Optional[Stdlib::Absolutepath] $daemon_opts            = undef,
+  Optional[Stdlib::Absolutepath] $systemd_dir            = undef,
 ) {
 
   package { 'haveged':
@@ -62,7 +62,7 @@ class haveged (
     name   => $package_name,
   }
 
-  if ($package_ensure in ['present', 'installed', 'latest', ]) {
+  unless ($package_ensure in ['absent', 'purged', ]) {
     # Combine all daemon options
     $opts_hash = {
       '-b' => $buffer_size,

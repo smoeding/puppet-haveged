@@ -97,6 +97,14 @@ describe 'haveged' do
         it { is_expected.to contain_package('haveged').with_ensure('latest') }
       end
 
+      context 'with package_ensure => 1.2.3' do
+        let :params do
+          { package_ensure: '1.2.3' }
+        end
+
+        it { is_expected.to contain_package('haveged').with_ensure('1.2.3') }
+      end
+
       context 'with package_ensure => absent' do
         let :params do
           { package_ensure: 'absent' }
