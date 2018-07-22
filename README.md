@@ -9,9 +9,9 @@
 1. [Overview](#overview)
 2. [Module Description - What does the module do?](#module-description)
 3. [Setup - The basics of getting started with haveged](#setup)
-	* [What haveged affects](#what-haveged-affects)
-	* [Setup requirements](#setup-requirements)
-	* [Beginning with haveged](#beginning-with-haveged)
+    * [What haveged affects](#what-haveged-affects)
+    * [Setup requirements](#setup-requirements)
+    * [Beginning with haveged](#beginning-with-haveged)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -69,11 +69,6 @@ class { 'haveged':
 
 - [**Public Classes**](#public-classes)
   - [Class: haveged](#class-haveged)
-- [**Private Classes**](#private-classes)
-  - [Class: haveged::config](#class-havegedconfig)
-  - [Class: haveged::package](#class-havegedpackage)
-  - [Class: haveged::params](#class-havegedparams)
-  - [Class: haveged::service](#class-havegedservice)
 - [**Facts**](#facts)
   - [Fact: haveged_startup_provider](#fact-haveged_startup_provider)
 
@@ -87,23 +82,23 @@ Main class, includes all other classes.
 
 ##### `buffer_size`
 
-Configure the collection buffer size. The value must be a string with a numeric value. It is interpreted as size in KB. Default: `128`
+Configure the collection buffer size. The value must be a an integer value. It is interpreted as size in KB. Default: `128`
 
 ##### `data_cache_size`
 
-Set the data cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is `16`
+Set the data cache size. The value must be an integer value. It is interpreted as size in KB. The default is `16`
 
 ##### `instruction_cache_size`
 
-Set the instruction cache size. The value must be string with a numeric value. It is interpreted as size in KB. The default is `16` or as determined by the CPUID.
+Set the instruction cache size. The value must be an integer value. It is interpreted as size in KB. The default is `16` or as determined by the CPUID.
 
 ##### `write_wakeup_threshold`
 
-Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy above this amount of bits. The value must be a string with a numeric value. Default: `1024`
+Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy above this amount of bits. The value must be an integer value. Default: `1024`
 
 ##### `service_name`
 
-The name of the service to manage. Normally provided by the `haveged::params` class.
+The name of the service to manage. Normally provided by the module's hiera configuration.
 
 ##### `service_enable`
 
@@ -115,29 +110,11 @@ Whether the haveged service should be running. Valid options: `stopped`, `false`
 
 ##### `package_name`
 
-The name of the package to manage. Normally provided by the `haveged::params` class.
+The name of the package to manage. Normally provided by the module's hiera configuration.
 
 ##### `package_ensure`
 
 The state of the haveged package. Valid options: `present`, `installed`, `absent`, `purged`, `held`, `latest` or a specific package version number. Default: `present`
-
-### Private Classes
-
-##### Class: `haveged::config`
-
-Configures the haveged daemon by updating the run time parameters for the daemon.
-
-##### Class: `haveged::package`
-
-Installs the package.
-
-##### Class: `haveged::params`
-
-Manages operating system specific parameters.
-
-##### Class: `haveged::service`
-
-Manages the haveged daemon.
 
 ### Facts
 
@@ -151,13 +128,11 @@ The startup system used on the node. The implementation uses the process name of
 
 The `haveged` module has been tested on
 
-* Debian 6 (Squeeze)
-* Debian 7 (Wheezy)
 * Debian 8 (Jessie)
-* Ubuntu 12.04 (Precise Pangolin)
+* Debian 9 (Stretch)
 * Ubuntu 14.04 (Trusty Tahr)
-* Ubuntu 15.10 (Wily Werewolf)
 * Ubuntu 16.04 (Xenial Xerus)
+* Ubuntu 18.04 (Bionic Beaver)
 * CentOS 6
 * CentOS 7
 
