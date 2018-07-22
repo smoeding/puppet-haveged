@@ -39,7 +39,7 @@
 # == Sample Usage:
 #
 #   class { 'haveged':
-#     write_wakeup_threshold => 1024,
+#     write_wakeup_threshold => 2048,
 #   }
 #
 #
@@ -53,6 +53,8 @@ class haveged (
   Optional[Integer]                                      $buffer_size            = undef,
   Optional[Integer]                                      $data_cache_size        = undef,
   Optional[Integer]                                      $instruction_cache_size = undef,
+  Optional[Stdlib::Absolutepath]                         $daemon_opts            = undef,
+  Optional[Stdlib::Absolutepath]                         $systemd_dir            = undef,
 ) {
 
   package { 'haveged':
@@ -61,14 +63,54 @@ class haveged (
   }
 
   if ($package_ensure in ['present', 'installed', 'latest', ]) {
-    class { 'haveged::config':
-      service_name           => $service_name,
-      buffer_size            => $buffer_size,
-      data_cache_size        => $data_cache_size,
-      instruction_cache_size => $instruction_cache_size,
-      write_wakeup_threshold => $write_wakeup_threshold,
-      require                => Package['haveged'],
-      notify                 => Service['haveged'],
+    # Combine all daemon options
+    $opts_hash = {
+      '-b' => $buffer_size,
+      '-d' => $data_cache_size,
+      '-i' => $instruction_cache_size,
+      '-w' => $write_wakeup_threshold,
+    }
+
+    # Remove all entries where the value is 'undef'
+    $opts_ok = delete_undef_values($opts_hash)
+
+    # Concat key and value into array elements
+    $opts_strings = join_keys_to_values($opts_ok, ' ')
+
+    # Join array elements into one string
+    $opts = join($opts_strings, ' ')
+
+    # Update shell configuration file if applicable
+    if $daemon_opts {
+      file { $daemon_opts:
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => epp('haveged/default.epp', { 'opts' => $opts }),
+        require => Package['haveged'],
+        notify  => Service['haveged'],
+      }
+    }
+
+    # Update systemd configuration file if applicable
+    if $systemd_dir {
+      file { "${systemd_dir}/${service_name}.service.d":
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
+      file { "${systemd_dir}/${service_name}.service.d/opts.conf":
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => epp('haveged/systemd.epp', { 'opts' => $opts }),
+        require => Package['haveged'],
+        notify  => Service['haveged'],
+      }
     }
 
     Service { 'haveged':
