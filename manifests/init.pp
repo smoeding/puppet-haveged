@@ -1,47 +1,44 @@
-# = Class: haveged
+# init.pp --- Class haveged
 #
-# Manage haveged
+# @summary Manage the haveged daemon
 #
-# == Parameters:
-#
-# [*buffer_size*]
-#   The size of the collection buffer in KB. Default: 128
-#
-# [*data_cache_size*]
-#   The data cache size in KB. Default is 16 or as determined by cpuid.
-#
-# [*instruction_cache_size*]
-#   The instruction cache size in KB. Default is 16 or as determined by cpuid.
-#
-# [*write_wakeup_threshold*]
-#   The haveged daemon generates more data if the number of entropy bits
-#   falls below this value.
-#
-# [*service_name*]
-#   The name of the service to manage.
-#
-# [*service_ensure*]
-#   Whether the service should be running.
-#
-# [*service_enable*]
-#   Whether the service should be enabled to start at boot time.
-#
-# [*package_name*]
-#   The name of the package to manage.
-#
-# [*package_ensure*]
-#   Ensure parameter passed onto Package resources. Default: 'present'
-#
-# == Requires:
-#
-# Puppetlabs stdlib module.
-#
-# == Sample Usage:
+# @example Declaring the class
 #
 #   class { 'haveged':
 #     write_wakeup_threshold => 2048,
 #   }
 #
+# @param buffer_size
+#   The size of the collection buffer. The value must be a an integer.
+#   It is interpreted as size in KB. Default: 128
+#
+# @param data_cache_size
+#   The data cache size in KB. The value must be a an integer.Default is 16
+#   or as determined by cpuid.
+#
+# @param instruction_cache_size
+#   The instruction cache size in KB. The value must be a an integer.Default
+#   is 16 or as determined by cpuid.
+#
+# @param write_wakeup_threshold
+#   The haveged daemon generates more data if the number of entropy bits
+#   falls below this value. The value must be a an integer. Default: 1024
+#
+# @param service_name
+#   The name of the service to manage. Default: 'haveged'
+#
+# @param service_ensure
+#   Whether the service should be running. Default: 'running'
+#
+# @param service_enable
+#   Whether the service should be enabled to start at boot time. This must be
+#   an boolean value: Default: true
+#
+# @param package_name
+#   The name of the package to manage. Default: 'haveged'
+#
+# @param package_ensure
+#   Ensure parameter passed onto Package resources. Default: 'present'
 #
 class haveged (
   String                         $package_name,
