@@ -1,5 +1,3 @@
-# init.pp --- Class haveged
-#
 # @summary Manage the haveged daemon
 #
 # @example Declaring the class
@@ -8,37 +6,43 @@
 #     write_wakeup_threshold => 2048,
 #   }
 #
-# @param buffer_size
-#   The size of the collection buffer. The value must be a an integer.
-#   It is interpreted as size in KB. Default: 128
+# @param package_name
+#   The name of the package to manage. Normally provided by the module's
+#   hiera configuration. Default: `haveged`
 #
-# @param data_cache_size
-#   The data cache size in KB. The value must be a an integer.Default is 16
-#   or as determined by cpuid.
-#
-# @param instruction_cache_size
-#   The instruction cache size in KB. The value must be a an integer.Default
-#   is 16 or as determined by cpuid.
-#
-# @param write_wakeup_threshold
-#   The haveged daemon generates more data if the number of entropy bits
-#   falls below this value. The value must be a an integer. Default: 1024
+# @param package_ensure
+#   The state of the haveged package. Valid options: `present`, `installed`,
+#   `absent`, `purged`, `held`, `latest` or a specific package version
+#   number. Default: `present`
 #
 # @param service_name
-#   The name of the service to manage. Default: 'haveged'
+#   The name of the service to manage. Normally provided by the module's
+#   hiera configuration. Default: `haveged`
 #
 # @param service_ensure
-#   Whether the service should be running. Default: 'running'
+#   Whether the service should be running. Normally provided by the module's
+#   hiera configuration. Default: `running`
 #
 # @param service_enable
 #   Whether the service should be enabled to start at boot time. This must be
-#   an boolean value: Default: true
+#   an boolean value. Default: `true`
 #
-# @param package_name
-#   The name of the package to manage. Default: 'haveged'
+# @param buffer_size
+#   The size of the collection buffer. The value must be a an integer.
+#   It is interpreted as size in KB. Default: `128`
 #
-# @param package_ensure
-#   Ensure parameter passed onto Package resources. Default: 'present'
+# @param data_cache_size
+#   The data cache size in KB. The value must be a an integer. Default
+#   is `16` or as determined by cpuid.
+#
+# @param instruction_cache_size
+#   The instruction cache size in KB. The value must be a an integer. Default
+#   is `16` or as determined by cpuid.
+#
+# @param write_wakeup_threshold
+#   The haveged daemon generates more data if the number of entropy bits
+#   falls below this value. The value must be a an integer. Default: `1024`
+#
 #
 class haveged (
   String                         $package_name,
@@ -69,7 +73,7 @@ class haveged (
     }
 
     # Remove all entries where the value is 'undef'
-    $opts_ok = delete_undef_values($opts_hash)
+    $opts_ok = $opts_hash.filter |$key,$val| { $val =~ NotUndef }
 
     # Concat key and value into array elements
     $opts_strings = join_keys_to_values($opts_ok, ' ')

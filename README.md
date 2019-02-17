@@ -67,55 +67,6 @@ class { 'haveged':
 
 ## Reference
 
-- [**Public Classes**](#public-classes)
-  - [Class: haveged](#class-haveged)
-- [**Facts**](#facts)
-  - [Fact: haveged_startup_provider](#fact-haveged_startup_provider)
-
-### Public Classes
-
-#### Class: `haveged`
-
-Main class, includes all other classes.
-
-**Parameters for the `haveged` class:**
-
-##### `buffer_size`
-
-Configure the collection buffer size. The value must be a an integer value. It is interpreted as size in KB. Default: `128`
-
-##### `data_cache_size`
-
-Set the data cache size. The value must be an integer value. It is interpreted as size in KB. The default is `16`
-
-##### `instruction_cache_size`
-
-Set the instruction cache size. The value must be an integer value. It is interpreted as size in KB. The default is `16` or as determined by the CPUID.
-
-##### `write_wakeup_threshold`
-
-Configure the threshold of available entropy. The daemon tries to keep the amount of available entropy above this amount of bits. The value must be an integer value. Default: `1024`
-
-##### `service_name`
-
-The name of the service to manage. Normally provided by the module's hiera configuration.
-
-##### `service_enable`
-
-Whether the haveged service should be enabled to start at boot. Valid options: `true`, `false`. Default: `true`
-
-##### `service_ensure`
-
-Whether the haveged service should be running. Valid options: `stopped`, `false`, `running`, `true`. Default: `running`
-
-##### `package_name`
-
-The name of the package to manage. Normally provided by the module's hiera configuration.
-
-##### `package_ensure`
-
-The state of the haveged package. Valid options: `present`, `installed`, `absent`, `purged`, `held`, `latest` or a specific package version number. Default: `present`
-
 ### Facts
 
 This module provides the following facts.
@@ -123,6 +74,10 @@ This module provides the following facts.
 ##### Fact: `haveged_startup_provider`
 
 The startup system used on the node. The implementation uses the process name of PID 1 to resolve the fact. The value is either `systemd` or `init`.
+
+### More Information
+
+See [REFERENCE.md](https://github.com/smoeding/puppet-haveged/blob/master/REFERENCE.md) for all other reference documentation.
 
 ## Limitations
 
