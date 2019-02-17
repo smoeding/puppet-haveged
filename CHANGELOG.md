@@ -1,3 +1,9 @@
+## 2019-02-17 - Release 1.1.0
+
+### Summary
+
+The module dependencies have been updated to include current releases of Puppet and the stdlib module.
+
 ## 2018-07-22 - Release 1.0.0
 
 ### Summary
