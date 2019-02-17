@@ -61,7 +61,7 @@ See the following sections for a detailed description of the available configura
 
 ```puppet
 class { 'haveged':
-  write_wakeup_threshold => '2048',
+  write_wakeup_threshold => 2048,
 }
 ```
 
@@ -71,9 +71,7 @@ class { 'haveged':
 
 This module provides the following facts.
 
-##### Fact: `haveged_startup_provider`
-
-The startup system used on the node. The implementation uses the process name of PID 1 to resolve the fact. The value is either `systemd` or `init`.
+* `haveged_startup_provider`: The startup system used on the node. The implementation uses the process name of PID 1 to resolve the fact. The value is either `systemd` or `init`.
 
 ### More Information
 
