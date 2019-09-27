@@ -75,7 +75,7 @@
     "entropy",
     "random"
   ],
-  "pdk-version": "1.9.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates",
-  "template-ref": "heads/master-0-g615413e"
+  "pdk-version": "1.13.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#master",
+  "template-ref": "heads/master-0-g1bf3a4e"
 }
