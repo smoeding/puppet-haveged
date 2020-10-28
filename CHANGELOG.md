@@ -1,3 +1,13 @@
+## 2020-10-28 - Release 2.1.0
+
+### Enhancements
+
+- Add Support for Debian 10
+- Add Support for Ubuntu 20.04
+- Add Support for RedHat 8
+- Add Support for CentOS 8
+- Add Support for OracleLinux 8
+
 ## 2019-09-27 - Release 2.0.0
 
 ### Breaking changes
