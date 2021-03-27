@@ -13,22 +13,10 @@ describe 'haveged' do
             .with_ensure('present') \
             .with_name('haveged')
 
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d') \
-            .with_ensure('directory') \
-            .with_owner('root') \
-            .with_group('root') \
-            .with_mode('0755')
-
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
-            .with_ensure('file') \
-            .with_owner('root') \
-            .with_group('root') \
-            .with_mode('0644') \
+          is_expected.to contain_systemd__unit_file('haveged.service') \
             .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1}) \
             .that_requires('Package[haveged]') \
             .that_notifies('Service[haveged]')
-
-          is_expected.not_to contain_file('/etc/default/haveged')
 
           is_expected.to contain_service('haveged') \
             .with_ensure('running') \
@@ -77,7 +65,7 @@ describe 'haveged' do
         it {
           is_expected.to contain_package('haveged').with_ensure('absent')
 
-          is_expected.not_to contain_Class('haveged::config')
+          is_expected.not_to contain_class('haveged::config')
           is_expected.not_to contain_service('haveged')
         }
       end
@@ -90,7 +78,7 @@ describe 'haveged' do
         it {
           is_expected.to contain_package('haveged').with_ensure('purged')
 
-          is_expected.not_to contain_Class('haveged::config')
+          is_expected.not_to contain_class('haveged::config')
           is_expected.not_to contain_service('haveged')
         }
       end
@@ -125,7 +113,7 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          is_expected.to contain_systemd__unit_file('haveged.service') \
             .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -b 1103})
         }
       end
@@ -136,7 +124,7 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          is_expected.to contain_systemd__unit_file('haveged.service') \
             .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -d 1103})
         }
       end
@@ -147,7 +135,7 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          is_expected.to contain_systemd__unit_file('haveged.service') \
             .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -i 1103})
         }
       end
@@ -158,7 +146,7 @@ describe 'haveged' do
         end
 
         it {
-          is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
+          is_expected.to contain_systemd__unit_file('haveged.service') \
             .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -w 1103$})
         }
       end

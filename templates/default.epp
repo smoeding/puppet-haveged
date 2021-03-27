@@ -1,3 +1,0 @@
-# This file is managed by Puppet.
-
-DAEMON_ARGS="<%= $opts -%>"

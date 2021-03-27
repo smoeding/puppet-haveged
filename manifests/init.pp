@@ -54,7 +54,6 @@ class haveged (
   Optional[Integer]              $buffer_size            = undef,
   Optional[Integer]              $data_cache_size        = undef,
   Optional[Integer]              $instruction_cache_size = undef,
-  Optional[Stdlib::Absolutepath] $daemon_opts            = undef,
 ) {
 
   package { 'haveged':
@@ -80,32 +79,8 @@ class haveged (
     # Join array elements into one string
     $opts = join($opts_strings, ' ')
 
-    # Update shell configuration file if applicable
-    if $daemon_opts {
-      file { $daemon_opts:
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => epp('haveged/default.epp', { 'opts' => $opts }),
-        require => Package['haveged'],
-        notify  => Service['haveged'],
-      }
-    }
-
     # Update systemd configuration file
-    file { "/etc/systemd/system/${service_name}.service.d":
-      ensure => directory,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
-    }
-
-    file { "/etc/systemd/system/${service_name}.service.d/opts.conf":
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
+    systemd::unit_file { "${service_name}.service":
       content => epp('haveged/systemd.epp', { 'opts' => $opts }),
       require => Package['haveged'],
       notify  => Service['haveged'],
