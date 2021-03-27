@@ -55,7 +55,6 @@ class haveged (
   Optional[Integer]              $data_cache_size        = undef,
   Optional[Integer]              $instruction_cache_size = undef,
   Optional[Stdlib::Absolutepath] $daemon_opts            = undef,
-  Optional[Stdlib::Absolutepath] $systemd_dir            = undef,
 ) {
 
   package { 'haveged':
@@ -94,24 +93,22 @@ class haveged (
       }
     }
 
-    # Update systemd configuration file if applicable
-    if $systemd_dir {
-      file { "${systemd_dir}/${service_name}.service.d":
-        ensure => directory,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0755',
-      }
+    # Update systemd configuration file
+    file { "/etc/systemd/system/${service_name}.service.d":
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+    }
 
-      file { "${systemd_dir}/${service_name}.service.d/opts.conf":
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => epp('haveged/systemd.epp', { 'opts' => $opts }),
-        require => Package['haveged'],
-        notify  => Service['haveged'],
-      }
+    file { "/etc/systemd/system/${service_name}.service.d/opts.conf":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => epp('haveged/systemd.epp', { 'opts' => $opts }),
+      require => Package['haveged'],
+      notify  => Service['haveged'],
     }
 
     Service { 'haveged':
