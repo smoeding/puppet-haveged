@@ -163,20 +163,18 @@ describe 'haveged' do
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
         osver = "#{facts[:operatingsystem]}-#{osrel}"
 
-        case osver
-        when 'Ubuntu-14.04'
-          it {
+        it {
+          case osver
+          when 'Ubuntu-14.04'
             is_expected.to contain_file('/etc/default/haveged') \
               .with_content(%r{^DAEMON_ARGS="-b 1103 -w 1024"})
-          }
 
-        when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
-             'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
-          it {
+          when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+               'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
             is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -b 1103})
-          }
-        end
+          end
+        }
       end
 
       context 'with parameter data_cache_size' do
@@ -187,20 +185,18 @@ describe 'haveged' do
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
         osver = "#{facts[:operatingsystem]}-#{osrel}"
 
-        case osver
-        when 'Ubuntu-14.04'
-          it {
+        it {
+          case osver
+          when 'Ubuntu-14.04'
             is_expected.to contain_file('/etc/default/haveged') \
               .with_content(%r{^DAEMON_ARGS="-d 1103 -w 1024"})
-          }
 
-        when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
-             'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
-          it {
+          when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+               'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
             is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -d 1103})
-          }
-        end
+          end
+        }
       end
 
       context 'with parameter instruction_cache_size' do
@@ -211,20 +207,18 @@ describe 'haveged' do
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
         osver = "#{facts[:operatingsystem]}-#{osrel}"
 
-        case osver
-        when 'Ubuntu-14.04'
-          it {
+        it {
+          case osver
+          when 'Ubuntu-14.04'
             is_expected.to contain_file('/etc/default/haveged') \
               .with_content(%r{^DAEMON_ARGS="-i 1103 -w 1024"})
-          }
 
-        when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
-             'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
-          it {
+          when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+               'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
             is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -i 1103})
-          }
-        end
+          end
+        }
       end
 
       context 'with parameter write_wakeup_threshold' do
@@ -235,20 +229,18 @@ describe 'haveged' do
         osrel = facts[:operatingsystemmajrelease] || facts[:operatingsystemrelease]
         osver = "#{facts[:operatingsystem]}-#{osrel}"
 
-        case osver
-        when 'Ubuntu-14.04'
-          it {
+        it {
+          case osver
+          when 'Ubuntu-14.04'
             is_expected.to contain_file('/etc/default/haveged') \
               .with_content(%r{^DAEMON_ARGS="-w 1103"$})
-          }
 
-        when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
-             'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
-          it {
+          when 'Debian-8', 'Debian-9', 'Ubuntu-16.04', 'Ubuntu-18.04',
+               'Scientific-7', 'CentOS-7', 'RedHat-7', 'OracleLinux-7'
             is_expected.to contain_file('/etc/systemd/system/haveged.service.d/opts.conf') \
               .with_content(%r{^ExecStart=.*haveged --Foreground --verbose=1 -w 1103$})
-          }
-        end
+          end
+        }
       end
     end
   end
