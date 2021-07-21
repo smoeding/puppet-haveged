@@ -97,7 +97,7 @@ class haveged (
         }
       }
       'RedHat': {
-        if ($opts != "-w 1024") {
+        if ($opts != '-w 1024') {
           # Use systemd drop-in file if non-standard options are given
           systemd::unit_file { "${service_name}.service":
             content => epp('haveged/systemd.epp', { 'opts' => $opts }),
