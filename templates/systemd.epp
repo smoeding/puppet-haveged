@@ -6,4 +6,4 @@
 ExecStart=
 
 # Define the new startup command
-ExecStart=/usr/sbin/haveged --Foreground --verbose=1 <%= $opts %>
+ExecStart=/usr/sbin/haveged <%= $opts %> -v 1 --Foreground
