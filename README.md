@@ -1,6 +1,6 @@
 # haveged
 
-[![Build Status](https://travis-ci.com/smoeding/puppet-haveged.svg?branch=master)](https://travis-ci.com/smoeding/puppet-haveged)
+[![Build Status](https://github.com/smoeding/puppet-haveged/actions/workflows/CI.yaml/badge.svg)](https://github.com/smoeding/puppet-haveged/actions/workflows/CI.yaml)
 [![Puppet Forge](http://img.shields.io/puppetforge/v/stm/haveged.svg)](https://forge.puppetlabs.com/stm/haveged)
 [![License](https://img.shields.io/github/license/smoeding/puppet-haveged.svg)](https://raw.githubusercontent.com/smoeding/puppet-haveged/master/LICENSE)
 
