@@ -33,7 +33,7 @@ describe 'haveged' do
         when 'RedHat'
           it {
             is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_content(%r{^ExecStart=.*haveged -w 1024 -v 1 --Foreground$})
+              .with_ensure('absent')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
           }

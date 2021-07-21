@@ -97,11 +97,21 @@ class haveged (
         }
       }
       'RedHat': {
-        # Update systemd drop-in file
-        systemd::unit_file { "${service_name}.service":
-          content => epp('haveged/systemd.epp', { 'opts' => $opts }),
-          require => Package['haveged'],
-          notify  => Service['haveged'],
+        if ($opts != "-w 1024") {
+          # Use systemd drop-in file if non-standard options are given
+          systemd::unit_file { "${service_name}.service":
+            content => epp('haveged/systemd.epp', { 'opts' => $opts }),
+            require => Package['haveged'],
+            notify  => Service['haveged'],
+          }
+        }
+        else {
+          # Remove systemd drop-in file if only standard options are given
+          systemd::unit_file { "${service_name}.service":
+            ensure  => absent,
+            require => Package['haveged'],
+            notify  => Service['haveged'],
+          }
         }
       }
       default: {
