@@ -84,7 +84,7 @@ class haveged (
         # Update configuration file
         file_line { '/etc/default/haveged-DAEMON_ARGS':
           path    => '/etc/default/haveged',
-          line    => "DAEMON_ARGS='${opts}'",
+          line    => "DAEMON_ARGS=\"${opts}\"",
           match   => '^DAEMON_ARGS=',
           require => Package['haveged'],
           notify  => Service['haveged'],

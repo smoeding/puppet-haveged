@@ -21,7 +21,7 @@ describe 'haveged' do
           it {
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
-              .with_line("DAEMON_ARGS='-w 1024'")
+              .with_line('DAEMON_ARGS="-w 1024"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
@@ -139,7 +139,7 @@ describe 'haveged' do
           when 'Debian'
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
-              .with_line("DAEMON_ARGS='-b 1103 -w 1024'")
+              .with_line('DAEMON_ARGS="-w 1024 -b 1103"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
@@ -165,7 +165,7 @@ describe 'haveged' do
           when 'Debian'
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
-              .with_line("DAEMON_ARGS='-d 1103 -w 1024'")
+              .with_line('DAEMON_ARGS="-w 1024 -d 1103"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
@@ -191,7 +191,7 @@ describe 'haveged' do
           when 'Debian'
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
-              .with_line("DAEMON_ARGS='-i 1103 -w 1024'")
+              .with_line('DAEMON_ARGS="-w 1024 -i 1103"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
@@ -217,7 +217,7 @@ describe 'haveged' do
           when 'Debian'
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
-              .with_line("DAEMON_ARGS='-w 1103'")
+              .with_line('DAEMON_ARGS="-w 1103"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
