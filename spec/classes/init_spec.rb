@@ -150,7 +150,7 @@ describe 'haveged' do
 
           when 'RedHat'
             is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_content(%r{^ExecStart=.*haveged -b 1103 -w 1024 -v 1 --Foreground$})
+              .with_content(%r{^ExecStart=.*haveged -w 1024 -b 1103 -v 1 --Foreground$})
           end
         }
       end
@@ -176,7 +176,7 @@ describe 'haveged' do
 
           when 'RedHat'
             is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_content(%r{^ExecStart=.*haveged -d 1103 -w 1024 -v 1 --Foreground$})
+              .with_content(%r{^ExecStart=.*haveged -w 1024 -d 1103 -v 1 --Foreground$})
           end
         }
       end
@@ -202,7 +202,7 @@ describe 'haveged' do
 
           when 'RedHat'
             is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_content(%r{^ExecStart=.*haveged -i 1103 -w 1024 -v 1 --Foreground$})
+              .with_content(%r{^ExecStart=.*haveged -w 1024 -i 1103 -v 1 --Foreground$})
           end
         }
       end

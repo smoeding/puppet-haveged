@@ -64,10 +64,10 @@ class haveged (
   unless ($package_ensure in ['absent', 'purged', ]) {
     # Combine all daemon options
     $opts_hash = {
+      '-w' => $write_wakeup_threshold,
       '-b' => $buffer_size,
       '-d' => $data_cache_size,
       '-i' => $instruction_cache_size,
-      '-w' => $write_wakeup_threshold,
     }
 
     # Remove all entries where the value is 'undef'
