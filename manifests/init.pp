@@ -128,7 +128,7 @@ class haveged (
       }
     }
 
-    Service { 'haveged':
+    service { 'haveged':
       ensure => $service_ensure,
       enable => $service_enable,
       name   => $service_name,
