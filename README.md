@@ -31,11 +31,9 @@ The haveged daemon provides a random number generator based on the HAVEGE (HArdw
 
 Package, service and configuration files for the haveged daemon.
 
-* On Debian based systems this includes the `/etc/default/haveged` file if an `init` based startup system is used. For systems using `systemd` the configuration is stored in the `/etc/systemd/system/haveged.service.d/opts.conf` file.
+* On Debian based systems this includes the `/etc/default/haveged` file.
 
-* On RHEL 6 systems the configuration is unfortunately hardcoded and no configuration file is used.
-
-* On RHEL 7 systems the configuration is stored in the `/etc/systemd/system/haveged.service.d/opts.conf` file.
+* On RedHat based systems the configuration is stored in the `/etc/systemd/system/haveged.service.d/opts.conf` file.
 
 ### Setup Requirements
 
@@ -67,29 +65,7 @@ class { 'haveged':
 
 ## Reference
 
-### Facts
-
-This module provides the following facts.
-
-* `haveged_startup_provider`: The startup system used on the node. The implementation uses the process name of PID 1 to resolve the fact. The value is either `systemd` or `init`.
-
-### More Information
-
-See [REFERENCE.md](https://github.com/smoeding/puppet-haveged/blob/master/REFERENCE.md) for all other reference documentation.
-
-## Limitations
-
-The `haveged` module has been tested on
-
-* Debian 8 (Jessie)
-* Debian 9 (Stretch)
-* Ubuntu 14.04 (Trusty Tahr)
-* Ubuntu 16.04 (Xenial Xerus)
-* Ubuntu 18.04 (Bionic Beaver)
-* CentOS 6
-* CentOS 7
-
-> Unfortunately the configuration is hardcoded on RHEL 6 systems. Using class parameters to set specific options will have no effect.
+See [REFERENCE.md](https://github.com/smoeding/puppet-haveged/blob/master/REFERENCE.md) for the reference documentation.
 
 ## Development
 
