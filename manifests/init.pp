@@ -90,17 +90,9 @@ class haveged (
           notify  => Service['haveged'],
         }
 
-        # Remove old systemd unit & drop-in files
+        # Remove old systemd unit
         systemd::unit_file { "${service_name}.service":
           ensure  => absent,
-          require => Package['haveged'],
-          notify  => Service['haveged'],
-        }
-
-        systemd::dropin_file { 'haveged/opts.conf':
-          ensure  => absent,
-          name    => 'opts.conf',
-          unit    => "${service_name}.service",
           require => Package['haveged'],
           notify  => Service['haveged'],
         }
@@ -126,6 +118,15 @@ class haveged (
       default: {
         fail('Unsupported operating system family')
       }
+    }
+
+    # Remove old drop-in file
+    systemd::dropin_file { 'haveged/opts.conf':
+      ensure  => absent,
+      name    => 'opts.conf',
+      unit    => "${service_name}.service",
+      require => Package['haveged'],
+      notify  => Service['haveged'],
     }
 
     service { 'haveged':
