@@ -1,3 +1,16 @@
+## 2021-08-05 - Release 3.0.0
+
+### Enhancements
+
+- Add support for Debian 11
+- Use the `puppet/systemd` module to manage the daemon.
+
+### Breaking changes
+
+- Remove support for Puppet 5
+- Remove support for Enterprise Linux 6 (EoL)
+- Remove support for Ubuntu 14.04 and 16.04 (EoL)
+
 ## 2020-10-28 - Release 2.1.0
 
 ### Enhancements

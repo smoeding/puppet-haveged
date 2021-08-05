@@ -1,6 +1,6 @@
 {
   "name": "stm-haveged",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "author": "stm",
   "summary": "Install and manage the HAVEGE daemon.",
   "license": "BSD-2-Clause",
@@ -22,13 +22,13 @@
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "9",
-        "10"
+        "10",
+        "11"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04",
         "18.04",
         "20.04"
       ]
@@ -64,7 +64,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.10 < 8.0.0"
+      "version_requirement": ">= 6.0.0 < 8.0.0"
     }
   ],
   "tags": [
