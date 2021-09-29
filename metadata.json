@@ -1,6 +1,6 @@
 {
   "name": "stm-haveged",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "stm",
   "summary": "Install and manage the HAVEGE daemon.",
   "license": "BSD-2-Clause",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 5.1.0 < 8.0.0"
+      "version_requirement": ">= 5.1.0 < 9.0.0"
     },
     {
       "name": "puppet/systemd",
