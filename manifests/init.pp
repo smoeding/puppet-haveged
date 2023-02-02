@@ -55,13 +55,12 @@ class haveged (
   Optional[Integer]       $data_cache_size        = undef,
   Optional[Integer]       $instruction_cache_size = undef,
 ) {
-
   package { 'haveged':
     ensure => $package_ensure,
     name   => $package_name,
   }
 
-  unless ($package_ensure in ['absent', 'purged', ]) {
+  unless ($package_ensure in ['absent', 'purged']) {
     # Combine all daemon options
     $opts_hash = {
       '-w' => $write_wakeup_threshold,

@@ -29,24 +29,24 @@ class { 'haveged':
 
 The following parameters are available in the `haveged` class:
 
-* [`package_name`](#package_name)
-* [`package_ensure`](#package_ensure)
-* [`service_name`](#service_name)
-* [`service_ensure`](#service_ensure)
-* [`service_enable`](#service_enable)
-* [`write_wakeup_threshold`](#write_wakeup_threshold)
-* [`buffer_size`](#buffer_size)
-* [`data_cache_size`](#data_cache_size)
-* [`instruction_cache_size`](#instruction_cache_size)
+* [`package_name`](#-haveged--package_name)
+* [`package_ensure`](#-haveged--package_ensure)
+* [`service_name`](#-haveged--service_name)
+* [`service_ensure`](#-haveged--service_ensure)
+* [`service_enable`](#-haveged--service_enable)
+* [`write_wakeup_threshold`](#-haveged--write_wakeup_threshold)
+* [`buffer_size`](#-haveged--buffer_size)
+* [`data_cache_size`](#-haveged--data_cache_size)
+* [`instruction_cache_size`](#-haveged--instruction_cache_size)
 
-##### <a name="package_name"></a>`package_name`
+##### <a name="-haveged--package_name"></a>`package_name`
 
 Data type: `String`
 
 The name of the package to manage.  Normally provided by the module's
 hiera configuration.  Default: `haveged`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-haveged--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -54,58 +54,58 @@ The state of the haveged package.  Valid options: `present`, `installed`,
 `absent`, `purged`, `held`, `latest` or a specific package version
 number.  Default: `present`
 
-##### <a name="service_name"></a>`service_name`
+##### <a name="-haveged--service_name"></a>`service_name`
 
 Data type: `String`
 
 The name of the service to manage.  Normally provided by the module's
 hiera configuration.  Default: `haveged`
 
-##### <a name="service_ensure"></a>`service_ensure`
+##### <a name="-haveged--service_ensure"></a>`service_ensure`
 
 Data type: `Stdlib::Ensure::Service`
 
 Whether the service should be running.  Normally provided by the module's
 hiera configuration.  Default: `running`
 
-##### <a name="service_enable"></a>`service_enable`
+##### <a name="-haveged--service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
 Whether the service should be enabled to start at boot time.  This must
 be an boolean value.  Default: `true`
 
-##### <a name="write_wakeup_threshold"></a>`write_wakeup_threshold`
+##### <a name="-haveged--write_wakeup_threshold"></a>`write_wakeup_threshold`
 
 Data type: `Integer`
 
 The haveged daemon generates more data if the number of entropy bits
 falls below this value.  The value must be a an integer.  Default: `1024`
 
-##### <a name="buffer_size"></a>`buffer_size`
+##### <a name="-haveged--buffer_size"></a>`buffer_size`
 
 Data type: `Optional[Integer]`
 
 The size of the collection buffer.  The value must be a an integer.  It
 is interpreted as size in KB.  Default: `128`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="data_cache_size"></a>`data_cache_size`
+##### <a name="-haveged--data_cache_size"></a>`data_cache_size`
 
 Data type: `Optional[Integer]`
 
 The data cache size in KB.  The value must be a an integer.  Default is
 `16` or as determined by cpuid.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="instruction_cache_size"></a>`instruction_cache_size`
+##### <a name="-haveged--instruction_cache_size"></a>`instruction_cache_size`
 
 Data type: `Optional[Integer]`
 
 The instruction cache size in KB.  The value must be a an integer.
 Default is `16` or as determined by cpuid.
 
-Default value: ``undef``
+Default value: `undef`
 
