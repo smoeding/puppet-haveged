@@ -1,3 +1,17 @@
+## 2023-02-05 - Release 4.0.0
+
+### Breaking changes
+
+- Remove support for CentOS and Scientific Linux
+- Remove support for Debian 9 (EoL)
+
+### Enhancements
+
+- Add support for Ubuntu-22.04
+- Add support for RedHat 9
+- Add support for OracleLinux 9
+- Allow systemd module 4.x
+
 ## 2021-09-29 - Release 3.0.1
 
 ### Enhancements
