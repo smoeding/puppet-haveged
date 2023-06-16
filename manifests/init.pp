@@ -88,13 +88,6 @@ class haveged (
           require => Package['haveged'],
           notify  => Service['haveged'],
         }
-
-        # Remove old systemd unit
-        systemd::unit_file { "${service_name}.service":
-          ensure  => absent,
-          require => Package['haveged'],
-          notify  => Service['haveged'],
-        }
       }
       'RedHat': {
         if ($opts != '-w 1024') {
@@ -117,15 +110,6 @@ class haveged (
       default: {
         fail('Unsupported operating system family')
       }
-    }
-
-    # Remove old drop-in file
-    systemd::dropin_file { 'haveged/opts.conf':
-      ensure  => absent,
-      name    => 'opts.conf',
-      unit    => "${service_name}.service",
-      require => Package['haveged'],
-      notify  => Service['haveged'],
     }
 
     service { 'haveged':

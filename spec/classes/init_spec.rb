@@ -24,11 +24,6 @@ describe 'haveged' do
               .with_line('DAEMON_ARGS="-w 1024"')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
-
-            is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_ensure('absent')
-              .that_requires('Package[haveged]')
-              .that_notifies('Service[haveged]')
           }
         when 'RedHat'
           it {
@@ -38,14 +33,6 @@ describe 'haveged' do
               .that_notifies('Service[haveged]')
           }
         end
-
-        it {
-          is_expected.to contain_systemd__dropin_file('haveged/opts.conf')
-            .with_ensure('absent')
-            .with_unit('haveged.service')
-            .that_requires('Package[haveged]')
-            .that_notifies('Service[haveged]')
-        }
 
         it {
           is_expected.to contain_service('haveged')
@@ -151,11 +138,6 @@ describe 'haveged' do
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
-            is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_ensure('absent')
-              .that_requires('Package[haveged]')
-              .that_notifies('Service[haveged]')
-
           when 'RedHat'
             is_expected.to contain_systemd__unit_file('haveged.service')
               .with_content(%r{^ExecStart=.*haveged -w 1024 -b 1103 -v 1 --Foreground$})
@@ -174,11 +156,6 @@ describe 'haveged' do
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
               .with_line('DAEMON_ARGS="-w 1024 -d 1103"')
-              .that_requires('Package[haveged]')
-              .that_notifies('Service[haveged]')
-
-            is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_ensure('absent')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
@@ -203,11 +180,6 @@ describe 'haveged' do
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
-            is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_ensure('absent')
-              .that_requires('Package[haveged]')
-              .that_notifies('Service[haveged]')
-
           when 'RedHat'
             is_expected.to contain_systemd__unit_file('haveged.service')
               .with_content(%r{^ExecStart=.*haveged -w 1024 -i 1103 -v 1 --Foreground$})
@@ -226,11 +198,6 @@ describe 'haveged' do
             is_expected.to contain_file_line('/etc/default/haveged-DAEMON_ARGS')
               .with_path('/etc/default/haveged')
               .with_line('DAEMON_ARGS="-w 1103"')
-              .that_requires('Package[haveged]')
-              .that_notifies('Service[haveged]')
-
-            is_expected.to contain_systemd__unit_file('haveged.service')
-              .with_ensure('absent')
               .that_requires('Package[haveged]')
               .that_notifies('Service[haveged]')
 
