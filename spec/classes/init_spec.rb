@@ -105,7 +105,20 @@ describe 'haveged' do
           { service_name: 'foobar' }
         end
 
-        it { is_expected.to contain_service('haveged').with_name('foobar') }
+        it {
+          is_expected.to contain_service('haveged').with_name('foobar')
+        }
+
+        case facts[:os]['family']
+        when 'Debian'
+          it {
+            is_expected.not_to contain_systemd__unit_file('foobar.service')
+          }
+        when 'RedHat'
+          it {
+            is_expected.to contain_systemd__unit_file('foobar.service')
+          }
+        end
       end
 
       context 'with service_ensure => stopped' do
