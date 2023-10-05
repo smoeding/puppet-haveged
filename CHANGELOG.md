@@ -1,3 +1,11 @@
+## 2023-10-03 - Release 5.1.0
+
+### Enhancements
+
+- Improve coverage of unit tests
+- Allow systemd 6.x module
+- Add support for Debian-12
+
 ## 2023-07-06 - Release 5.0.0
 
 ### Breaking changes
