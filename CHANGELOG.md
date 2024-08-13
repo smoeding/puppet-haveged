@@ -1,3 +1,10 @@
+## 2024-08-13 - Release 5.2.0
+
+### Enhancements
+
+- Allow system 7.x module
+- Add support for Ubuntu-24.04
+
 ## 2023-10-03 - Release 5.1.0
 
 ### Enhancements
