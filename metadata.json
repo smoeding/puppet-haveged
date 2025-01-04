@@ -1,6 +1,6 @@
 {
   "name": "stm-haveged",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "author": "stm",
   "summary": "Install and manage the HAVEGE daemon.",
   "license": "BSD-2-Clause",
