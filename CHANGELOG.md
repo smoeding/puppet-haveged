@@ -1,3 +1,19 @@
+## 2025-09-26 - Release 6.0.0
+
+### Features
+
+- Add support for RedHat-10.
+- Add support for OracleLinux-10.
+- Add support for Debian-13 Trixie.
+
+### Breaking changes
+
+- Drop support for RedHat-7.
+- Drop support for OracleLinux-7.
+- Drop support for Debian-10 Buster.
+- Drop support for Ubuntu-18.04 Bionic Beaver.
+- Drop support for Puppet; add support for OpenVox.
+
 ## 2025-01-04 - Release 5.2.1
 
 ### Enhancements
